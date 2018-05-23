@@ -188,7 +188,7 @@ class ProductManager extends CI_Controller {
                 $ext2 = explode('.', $_FILES['picture1']['name']);
                 $ext3 = strtolower(end($ext2));
                 $file_newname1 = $temp1 . "2." . $ext3;
-                $config['file_name1'] = $file_newname1;
+                $config['file_name'] = $file_newname1;
                 //Load upload library and initialize configuration
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
@@ -203,7 +203,7 @@ class ProductManager extends CI_Controller {
                 $ext4 = explode('.', $_FILES['picture2']['name']);
                 $ext5 = strtolower(end($ext4));
                 $file_newname2 = $temp1 . "3." . $ext5;
-                $config['file_name2'] = $file_newname2;
+                $config['file_name'] = $file_newname2;
                 //Load upload library and initialize configuration
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
@@ -234,7 +234,11 @@ class ProductManager extends CI_Controller {
 
             $this->db->insert('products', $post_data);
             $last_id = $this->db->insert_id();
-
+            $sku = "CAS" . $user_id . $last_id;
+            $this->db->set('sku', $sku);
+            $this->db->where('id', $last_id); //set column_name and value in which row need to update
+            $this->db->update('products'); //
+            //
             //Storing insertion status message.
             if ($last_id) {
                 redirect('ProductManager/edit_product/' . $last_id);
@@ -251,6 +255,9 @@ class ProductManager extends CI_Controller {
         $product_model = $this->Product_model;
         $data['product_model'] = $product_model;
         $data['product_attributes'] = $product_model->product_attribute_list($product_id);
+
+        $data['attributefunction'] = $product_model;
+
         $this->db->select('*');
         $this->db->where('id', $product_id);
         $query = $this->db->get('products');
@@ -261,6 +268,26 @@ class ProductManager extends CI_Controller {
         } else {
             redirect('ProductManager/productReport');
         }
+        $vproduct_id = $product_id;
+        if ($productobj->variant_product_of) {
+            $vproduct_id = $productobj->variant_product_of;
+        }
+
+        $category_id = $productobj->category_id;
+        $product_query = "select pt.id as product_id, sku, pt.short_description, pt.title, pt.sale_price, pt.regular_price, pt.price, pt.file_name 
+            from products as pt where (pt.id  = $vproduct_id) or (variant_product_of = $vproduct_id) ";
+        $query = $this->db->query($product_query);
+        $product_result_variant = $query->result();
+        $data['variant_products'] = $product_result_variant;
+
+
+        $category_id = $productobj->category_id;
+        $product_query = "select pt.id as product_id,sku, pt.short_description, pt.title, pt.sale_price, pt.regular_price, pt.price, pt.file_name 
+            from products as pt where pt.category_id in ($category_id) and pt.id !=$product_id and variant_product_of=0 ";
+        $query = $this->db->query($product_query);
+        $product_result_related = $query->result();
+        $data['related_products'] = $product_result_related;
+
 
         $this->db->select('id, category_name');
         $query = $this->db->get('category');
@@ -270,7 +297,7 @@ class ProductManager extends CI_Controller {
         $data['category_attribute'] = $catarobj['category_attribute'];
         $data['category_str'] = $catarobj['category_str'];
 
-
+        //add new attr
         if (isset($_POST['save_attr'])) {
             $category_attr_array = array(
                 'attribute_id' => $this->input->post('attribute_id'),
@@ -286,8 +313,8 @@ class ProductManager extends CI_Controller {
             $this->db->insert('product_attribute', $productattr);
             redirect('ProductManager/edit_product/' . $product_id);
         }
-
-
+        //end of new attr
+        //update procuct
         if (isset($_POST['editdata'])) {
             $cat_name = $this->input->post('category_name');
             //$dat = date('Y-m-d ');
@@ -301,7 +328,7 @@ class ProductManager extends CI_Controller {
             $picture2 = $data['product_obj']->file_name2;
             $config['upload_path'] = 'assets_main/productimages';
             $config['allowed_types'] = '*';
-            $config['overwrite'] = TRUE;
+//            $config['overwrite'] = TRUE;
 
             if (!empty($_FILES['picture']['name'])) {
                 $ext2 = explode('.', $_FILES['picture']['name']);
@@ -316,6 +343,7 @@ class ProductManager extends CI_Controller {
                 $this->upload->initialize($config);
                 if ($this->upload->do_upload('picture')) {
                     $uploadData = $this->upload->data();
+                    $file_newname = $uploadData['file_name'];
                     $this->db->set('file_name', $file_newname);
                 }
             }
@@ -337,6 +365,8 @@ class ProductManager extends CI_Controller {
                 $this->upload->initialize($config);
                 if ($this->upload->do_upload('picture1')) {
                     $uploadData = $this->upload->data();
+                    $uploadData = $this->upload->data();
+                    $file_newname = $uploadData['file_name'];
                     $this->db->set('file_name1', $file_newname);
                     $this->db->where('id', $product_id); //set column_name and value in which row need to update
                     $this->db->update('products'); //
@@ -361,6 +391,7 @@ class ProductManager extends CI_Controller {
                 $this->upload->initialize($config);
                 if ($this->upload->do_upload('picture2')) {
                     $uploadData = $this->upload->data();
+                    $file_newname = $uploadData['file_name'];
                     $this->db->set('file_name2', $file_newname);
                     $this->db->where('id', $product_id); //set column_name and value in which row need to update
                     $this->db->update('products'); //
@@ -399,16 +430,34 @@ class ProductManager extends CI_Controller {
             $this->db->set('credit_limit', $this->input->post('credit_limit'));
             $this->db->set('stock_status', $this->input->post('stock_status'));
             $this->db->set('keywords', $this->input->post('keywords'));
-            
+
             $this->db->set('home_slider', $this->input->post('home_slider'));
             $this->db->set('home_bottom', $this->input->post('home_bottom'));
-            
+
             $this->db->where('id', $product_id); //set column_name and value in which row need to update
             $this->db->update('products'); //
             //Storing insertion status message.
             redirect('ProductManager/edit_product/' . $product_id);
         }
+        //end of update product
         $this->load->view('productManager/editProducts', $data);
+    }
+
+    //variant_product
+    function variant_product($product_id) {
+        $this->db->where('id', $product_id);
+        $query = $this->db->get('products');
+        $product = $query->row_array();
+        unset($product['id']);
+        $product['variant_product_of'] = $product_id;
+        $this->db->insert('products', $product);
+        $last_id = $this->db->insert_id();
+        $sku = "CAS" . $user_id . $last_id;
+        $this->db->set('sku', $sku);
+        $this->db->where('id', $last_id); //set column_name and value in which row need to update
+        $this->db->update('products');
+
+        redirect('ProductManager/edit_product/' . $last_id);
     }
 
     function productReport() {

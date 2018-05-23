@@ -111,6 +111,15 @@ class Product_model extends CI_Model {
             return array();
         }
     }
+    
+    
+    function variant_product_attr($product_id){
+        $queryr = "SELECT pa.attribute_id, pa.attribute, pa.product_id, pa.attribute_value_id, cav.attribute_value FROM product_attribute as pa 
+join category_attribute_value as cav on cav.id = pa.attribute_value_id 
+where pa.product_id=$product_id ";
+        $query = $this->db->query($queryr);
+        return $query->result_array();
+    }
 
     function category_attribute_list($id) {
         $this->db->where('attribute_id', $id);

@@ -98,81 +98,9 @@ $session_data = $this->session->userdata('logged_in');
                 </li>
 
                 <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/add_user">
-                        <i class="active fa fa-plus "></i> <span>Add User</span>
-
-                    </a>
-                </li>
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/ProductManager/app_users">
-                        <i class="active fa fa-list "></i> <span>Users Report</span>
-
-                    </a>
-                </li>
-
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/add_video_post">
-                        <i class="active fa fa-plus "></i> <span>Add Video Post</span>
-
-                    </a>
-                </li> 
-
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/post_comment_report">
-                        <i class="active fa fa-calendar "></i> <span>Comment Report</span>
-
-                    </a>
-                </li>
-
-
-
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/video_post_report">
-                        <i class="active fa fa-calendar "></i> <span>Video Post Report</span>
-
-                    </a>
-                </li>
-
-
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/user_post">
-                        <i class="active fa fa-bell "></i> <span>Approve Post</span>
-
-                    </a>
-                </li>
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/post_approved_report">
-                        <i class="active fa fa-check "></i> <span>Approved Post</span>
-
-                    </a>
-                </li>
-            <?php } if ($session_data['user_type'] == 'Manager') { ?>
-
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/add_post">
-                        <i class="active fa fa-plus "></i> <span>Add Post</span>
-
-                    </a>
-                </li>   
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/add_video_post">
-                        <i class="active fa fa-plus "></i> <span>Add Video Post</span>
-
-                    </a>
-                </li>
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/video_post_report">
-                        <i class="active fa fa-calendar "></i> <span>Video Post Report</span>
-
-                    </a>
-                </li>
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/QueryHandler/user_post">
-                        <i class="active fa fa-bell "></i> <span>Approve Status</span>
-
-                    </a>
-                </li>
-            <?php } ?>
+                    <?php
+                }
+                ?>
         </ul>
     </section>
     <!-- /.sidebar -->
