@@ -76,7 +76,7 @@ $this->load->view('layout/layoutTop');
                                         <span class="price_tag">P:<b><?php echo $value['price']; ?></b></span>
                                     </td>
                                     <td>
-                                        <span class="seller_tag"><b><?php echo $value['first_name']; ?><?php echo $value['last_name']; ?></b></span>
+                                        <span class="seller_tag"><b><?php echo $value['first_name']; ?> <?php echo $value['last_name']; ?></b></span>
                                     </td>
                                     <td >
                                         <span class="">
@@ -89,7 +89,7 @@ $this->load->view('layout/layoutTop');
                                         </span>
                                     </td>
                                     <td >
-                                        <a href="<?php echo '../ProductManager/edit_product/' . $value['id']; ?>" class="btn btn-danger"><i class="fa fa-edit"></i> Edit</a>
+                                        <a href="<?php echo site_url('ProductManager/edit_product/'.$value['id']); ?>" class="btn btn-danger"><i class="fa fa-edit"></i> Edit</a>
                                     </td>
                                 </tr>
                                 <?php

@@ -257,6 +257,8 @@ class ProductManager extends CI_Controller {
         $data['product_attributes'] = $product_model->product_attribute_list($product_id);
 
         $data['attributefunction'] = $product_model;
+        
+        $data['product_detail_attrs'] = $product_model->productAttributes($product_id);
 
         $this->db->select('*');
         $this->db->where('id', $product_id);
@@ -283,7 +285,16 @@ class ProductManager extends CI_Controller {
 
         $category_id = $productobj->category_id;
         $product_query = "select pt.id as product_id,sku, pt.short_description, pt.title, pt.sale_price, pt.regular_price, pt.price, pt.file_name 
-            from products as pt where pt.category_id in ($category_id) and pt.id !=$product_id and variant_product_of=0 ";
+            from products as pt where pt.category_id in ($category_id) and pt.id !=$product_id and pt.id not in (select related_product_id from product_related where product_id = $product_id) and variant_product_of=0 ";
+        $query = $this->db->query($product_query);
+        $product_result_related = $query->result();
+        $data['related_products_check'] = $product_result_related;
+
+
+        $category_id = $productobj->category_id;
+        $product_query = "select pr.id as related_product_id, pt.id as product_id,sku, pt.short_description, pt.title, pt.sale_price, pt.regular_price, pt.price, pt.file_name 
+            from products as pt join product_related as pr on pr.product_id = pt.id
+            where pr.product_id =$product_id  ";
         $query = $this->db->query($product_query);
         $product_result_related = $query->result();
         $data['related_products'] = $product_result_related;
@@ -440,6 +451,37 @@ class ProductManager extends CI_Controller {
             redirect('ProductManager/edit_product/' . $product_id);
         }
         //end of update product
+        //add related products
+        if (isset($_POST['add_realted_products'])) {
+            $productlists = $this->input->post('related_product_id');
+
+            foreach ($productlists as $key => $value) {
+                $related_product_array = array(
+                    'related_product_id' => $value,
+                    'product_id' => $product_id,
+                );
+                $this->db->insert('product_related', $related_product_array);
+            }
+
+            //$last_id = $this->db->insert_id();
+            redirect('ProductManager/edit_product/' . $product_id);
+        }
+        //end of realted products
+        //remove related products
+        if (isset($_POST['remove_realted_products'])) {
+            $productlists = $this->input->post('related_product_id');
+
+            foreach ($productlists as $key => $value) {
+                $related_product_id = $value;
+                $this->db->where('id', $related_product_id);
+                $this->db->delete('product_related');
+            }
+
+            //$last_id = $this->db->insert_id();
+            redirect('ProductManager/edit_product/' . $product_id);
+        }
+        //remove of realted products
+
         $this->load->view('productManager/editProducts', $data);
     }
 

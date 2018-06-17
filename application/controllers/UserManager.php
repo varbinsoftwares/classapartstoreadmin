@@ -25,11 +25,15 @@ class UserManager extends CI_Controller {
         } else {
             $data['users'] = [];
         }
+        if ($this->user_type != 'Admin') {
+            redirect('UserManager/not_granted');
+        }
+
         $this->load->view('userManager/usersReport', $data);
     }
 
     public function not_granted() {
-        
+         $this->load->view('errors/html/error_404_c');
     }
 
     public function usersReport() {
@@ -37,7 +41,9 @@ class UserManager extends CI_Controller {
         $data['users_customer'] = $this->User_model->user_reports("Customer");
         $data['users_all'] = $this->User_model->user_reports("All");
         $data['users_blocked'] = $this->User_model->user_reports("Blocked");
-
+        if ($this->user_type != 'Admin') {
+            redirect('UserManager/not_granted');
+        }
         $this->load->view('userManager/usersReport', $data);
     }
 
@@ -87,7 +93,6 @@ class UserManager extends CI_Controller {
         $user_model = $this->User_model;
         $config['upload_path'] = 'assets_main/userimages';
         $config['allowed_types'] = '*';
-
         if ($user_id) {
             $uid = $user_id;
         } else {
@@ -142,8 +147,100 @@ class UserManager extends CI_Controller {
             $this->db->set('pincode', $this->input->post('pincode'));
             $this->db->where('id', $uid); //set column_name and value in which row need to update
             $this->db->update('admin_users');
-            redirect('UserManager/usersReport');
+            redirect('UserManager/profile_update_info');
         }
+        $this->load->view('userManager/profile_update_info', $data);
+    }
+
+    public function user_details($user_id = 0) {
+        $user_model = $this->User_model;
+        $config['upload_path'] = 'assets_main/userimages';
+        $config['allowed_types'] = '*';
+        if ($user_id) {
+            $uid = $user_id;
+        } else {
+            $uid = $this->user_id;
+        }
+        $this->db->where('user_id', $user_id);
+        $query = $this->db->get('user_order');
+        $orderlist = $query->result();
+        $data['orderslist'] = $orderlist;
+
+        $this->db->where('user_id', $user_id);
+        $this->db->order_by('status', 'desc');
+        $query = $this->db->get('shipping_address');
+        $data['user_address_details'] = $query->result_array();
+
+
+        //user credit details
+        $user_credits = $this->User_model->user_credits($this->user_id);
+        $data['user_credits'] = $user_credits;
+
+        $querys = "select * from (
+                   select credit, '' as debit, order_id, remark, c_date, c_time  FROM `user_credit` 
+                   where user_id = $user_id and credit>0
+                    union
+                   select '' as credit, credit as debit, order_id, remark, c_date, c_time  FROM `user_debit`
+                   where user_id = $user_id  and credit>0
+                   ) as credit order by c_date desc";
+
+        $query = $this->db->query($querys);
+        $creditlist = $query->result();
+        $data['creditlist'] = $creditlist;
+        //user credit status details
+
+
+        $userdetails = $user_model->user_details($uid);
+
+        if (!$userdetails) {
+            redirect('ProductManager/productReport');
+        }
+
+        $data['user_details'] = $userdetails;
+        if (isset($_POST['submit'])) {
+            $picture = '';
+            if (!empty($_FILES['picture']['name'])) {
+                $temp1 = rand(100, 1000000);
+                $config['overwrite'] = TRUE;
+                $ext1 = explode('.', $_FILES['picture']['name']);
+                $ext = strtolower(end($ext1));
+                if ($userdetails->image) {
+                    $ext22 = explode('.', $userdetails->image);
+                    $ext33 = strtolower(end($ext22));
+                    $filename = $ext22[0];
+                    $file_newname = $filename . "." . $ext;
+                } else {
+                    $file_newname = $temp1 . "1." . $ext;
+                }
+                $picture = $file_newname;
+                $config['file_name'] = $file_newname;
+                //Load upload library and initialize configuration
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('picture')) {
+                    $uploadData = $this->upload->data();
+                    $picture = $uploadData['file_name'];
+                } else {
+                    $picture = '';
+                }
+            }
+            $op_date_time = date('Y-m-d H:i:s');
+            $user_type = 'Vendor';
+            $password = $this->input->post('password');
+            $pwd = md5($password);
+            $this->db->set('first_name', $this->input->post('first_name'));
+            $this->db->set('image', $picture);
+            $this->db->set('last_name', $this->input->post('last_name'));
+            $this->db->set('contact_no', $this->input->post('contact_no'));
+            $this->db->set('address', $this->input->post('address'));
+            $this->db->set('state', $this->input->post('state'));
+            $this->db->set('city', $this->input->post('city'));
+            $this->db->set('pincode', $this->input->post('pincode'));
+            $this->db->where('id', $uid); //set column_name and value in which row need to update
+            $this->db->update('admin_users');
+            redirect('UserManager/user_details/' . $user_id);
+        }
+
 
         //Delete User
         if (isset($_POST['delete_user'])) {
@@ -160,7 +257,7 @@ class UserManager extends CI_Controller {
             $this->db->set('status', 'Blocked');
             $this->db->where('id', $user_delte_id);
             $this->db->update('admin_users');
-            redirect('UserManager/usersReport');
+            redirect('UserManager/user_details/' . $user_id);
         }
 
         //Unblock User
@@ -169,31 +266,28 @@ class UserManager extends CI_Controller {
             $this->db->set('status', '');
             $this->db->where('id', $user_delte_id);
             $this->db->update('admin_users');
-            redirect('UserManager/usersReport');
+            redirect('UserManager/user_details/' . $user_id);
         }
-
-
-        $this->load->view('userManager/profile_update_info', $data);
+        $this->load->view('userManager/user_details', $data);
     }
 
     public function users_api() {
         $query = "select u.*, 
-            (select sum(credit) from user_credit as uc where uc.user_id = u.id) as credits
-            (select sum(credit) from user_debit as uc where uc.user_id = u.id) as debits,
+            (select sum(credit) from user_credit as uc where uc.user_id = u.id) as credits,
+            (select sum(credit) from user_debit as uc where uc.user_id = u.id) as debits
             from admin_users as u";
 
         $userslist = $this->User_model->query_exe($query);
-        
+
         $usersdata = array();
         foreach ($userslist as $key => $value) {
             $usersdata[$value['id']] = $value;
         }
-        
+
         echo json_encode(array('list' => $usersdata));
     }
 
     public function usersCreditDebit() {
-
         $op_date = date('Y-m-d');
         $op_time = date('H:i:s');
         if (isset($_POST['allot_credit'])) {

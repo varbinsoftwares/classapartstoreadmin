@@ -13,6 +13,99 @@ $this->load->view('layout/layoutTop');
         background-position-y: center!important;
     }
 </style>
+<style>
+    .cartbutton{
+        width: 100%;
+        padding: 6px;
+        color: #fff!important;
+    }
+    .noti-check1{
+        background: #f5f5f5;
+        padding: 25px 30px;
+
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .noti-check1 span{
+        color: red;
+        color: red;
+        width: 111px;
+        float: left;
+        text-align: right;
+        padding-right: 13px;
+    }
+
+    .noti-check1 h6{
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .address_block{
+        background: #fff;
+        border: 3px solid #d30603;
+        padding: 5px 10px;
+        margin-bottom: 20px;
+
+    }
+    .checkcart {
+        border-radius: 50%;
+        position: absolute;
+        top: -28px;
+        left: -8px;
+        padding: 4px;
+        background: #fff;
+        border: 2px solid green;
+    }
+
+
+    .default{
+        border: 2px solid green;
+    }
+
+    .default{
+        border: 2px solid green;
+    }
+
+    .checkcart i{
+        color: green;
+    }
+
+
+
+    .cartdetail_small {
+        float: left;
+        width: 203px;
+    }
+
+</style>
+
+<style>
+    .order_box{
+        padding: 10px;
+        padding-bottom: 11px!important;
+        height: 110px;
+        border-bottom: 1px solid #c5c5c5;
+    }
+    .order_box li{
+        line-height: 19px!important;
+        padding: 7px!important;
+        border: none!important;
+    }
+
+    .order_box li i{
+        float: left!important;
+        line-height: 19px!important;
+        margin-right: 13px!important;
+    }
+
+    .blog-posts article {
+        margin-bottom: 10px;
+    }
+</style>
+
+
+
 <!-- Main content -->
 <section class="content">
     <div class="">
@@ -22,6 +115,7 @@ $this->load->view('layout/layoutTop');
                 <h3 class="box-title">Vendor Id:<?php echo $user_details->email; ?></h3>
             </div>
             <div class="box-body">
+
                 <form action="#" method="post" enctype="multipart/form-data">
 
                     <div class="row">
@@ -73,41 +167,57 @@ $this->load->view('layout/layoutTop');
                                     </div>
                                 </div>
 
-
-
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Address</label>
-                                        <textarea class="form-control"  placeholder="Address" name="address"><?php echo $user_details->address; ?></textarea>
+                                        <label>Gender</label>
+                                        <input type="text" class="form-control"  name="contact_no" placeholder="Contact No." value="<?php echo $user_details->gender; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Birth Date</label>
+                                        <input type="text" class="form-control"  name="contact_no" placeholder="Contact No." value="<?php echo $user_details->birth_date; ?>">
                                     </div>
                                 </div>
 
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label >City</label>
-                                        <input type="text" class="form-control" name="city"  placeholder="City" value="<?php echo $user_details->city; ?>">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label >State</label>
-                                        <input type="text" class="form-control"  name="state"  placeholder="State" value="<?php echo $user_details->state; ?>">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Pincode</label>
-                                        <input type="text" class="form-control"  name="pincode"  placeholder="Pincode" value="<?php echo $user_details->pincode; ?>">
-                                    </div>
-                                </div>
+                                <?php
+                                if ($user_details->user_type == 'Vendor') {
+                                    ?>
 
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Shop/Office Address</label>
+                                            <textarea class="form-control"  placeholder="Address" name="address"><?php echo $user_details->address; ?></textarea>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label >City</label>
+                                            <input type="text" class="form-control" name="city"  placeholder="City" value="<?php echo $user_details->city; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label >State</label>
+                                            <input type="text" class="form-control"  name="state"  placeholder="State" value="<?php echo $user_details->state; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Pincode</label>
+                                            <input type="text" class="form-control"  name="pincode"  placeholder="Pincode" value="<?php echo $user_details->pincode; ?>">
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
                                 <div class="col-md-12">
                                     <button type="submit" name="submit" class="btn btn-primary">Update Profile</button>
-                                    <button type="submit" name="delete_user" class="btn btn-danger pull-right" value="<?php echo $user_details->id; ?>" >Delete User</button>
-
-                                    <button type="submit" name="<?php echo $user_details->status=='Blocked'?'unblock_user':'block_user'; ?>" class="btn btn-warning pull-right" value="<?php echo $user_details->id; ?>" style="margin-right: 10px"><?php echo $user_details->status=='Blocked'?'Unblock User':'Block User'; ?></button>
-
+                               
 
                                 </div>
                             </div>

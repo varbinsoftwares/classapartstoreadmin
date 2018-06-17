@@ -96,6 +96,20 @@ class Product_model extends CI_Model {
         }
     }
 
+    function singleProductAttrs($product_id) {
+        $query = "SELECT pa.attribute, pa.product_id, pa.attribute_value_id, cav.attribute_value FROM product_attribute as pa 
+join category_attribute_value as cav on cav.id = pa.attribute_value_id
+where pa.product_id = $product_id group by attribute_value_id";
+        $product_attr_value = $this->query_exe($query);
+        $arrayattr = [];
+        foreach ($product_attr_value as $key => $value) {
+            $attrk = $value['attribute'];
+            $attrv = $value['attribute_value'];
+            array_push($arrayattr, $attrk . '-' . $attrv);
+        }
+        return implode(", ", $arrayattr);
+    }
+
     function product_attribute_list($product_id) {
         $this->db->where('product_id', $product_id);
         $this->db->group_by('attribute_value_id');
@@ -111,9 +125,16 @@ class Product_model extends CI_Model {
             return array();
         }
     }
-    
-    
-    function variant_product_attr($product_id){
+
+    function productAttributes($product_id) {
+        $pquery = "SELECT pa.attribute, cav.attribute_value FROM product_attribute as pa
+      join category_attribute_value as cav on cav.id = pa.attribute_value_id
+      where pa.product_id = $product_id";
+        $attr_products = $this->query_exe($pquery);
+        return $attr_products;
+    }
+
+    function variant_product_attr($product_id) {
         $queryr = "SELECT pa.attribute_id, pa.attribute, pa.product_id, pa.attribute_value_id, cav.attribute_value FROM product_attribute as pa 
 join category_attribute_value as cav on cav.id = pa.attribute_value_id 
 where pa.product_id=$product_id ";
@@ -132,6 +153,11 @@ where pa.product_id=$product_id ";
             return array();
         }
     }
+    
+    
+    
+    
+    
 
 }
 

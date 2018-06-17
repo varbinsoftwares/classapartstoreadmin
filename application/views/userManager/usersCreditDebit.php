@@ -129,7 +129,7 @@ function userReportFunction($users) {
             <div class="col-md-6">
                 <div class="box box-danger">
                     <div class="box-header">
-                        <h3 class="box-title">Users Reports</h3>
+                        <h3 class="box-title">Credit Allotment</h3>
                     </div>
                     <div class="box-body">
                         <div ng-if="userobj.email">
@@ -148,8 +148,9 @@ function userReportFunction($users) {
                                 </div>
                                 <div class="box-footer no-padding">
                                     <ul class="nav nav-stacked">
-                                        <li><a href="#">Available Credits <span class="pull-right badge bg-blue">{{userobj.credits}}</span></a></li>
-                                        <li><a href="#">Used Credits <span class="pull-right badge bg-aqua">5</span></a></li>
+                                        <li><a href="#">Available Credits <span class="pull-right badge bg-blue">{{userobj.credits-userobj.debits}}</span></a></li>
+                                        <li><a href="#">Alloted Credits <span class="pull-right badge bg-blue">{{userobj.credits}}</span></a></li>
+                                        <li><a href="#">Used Credits <span class="pull-right badge bg-aqua">{{userobj.debits}}</span></a></li>
                                     </ul>
                                 </div>
                             </div>

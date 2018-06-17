@@ -28,6 +28,37 @@ $session_data = $this->session->userdata('logged_in');
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
 
+
+
+            <?php if ($session_data['user_type'] == 'Admin') { ?>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-list"></i>
+                        <span>Order Management</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <!--Admin Access-->
+                        <li>
+                            <a href="<?php echo site_url('Order/orderslist'); ?>">
+                                <i class="active fa fa-plus "></i> <span>Orders Report</span>
+                            </a>
+                        </li>   
+                        <li>
+                            <a href="<?php echo site_url('Order/addVendor') ?>">
+                                <i class="active fa fa-plus "></i> <span>Order Analytics</span>
+                            </a>
+                        </li>   
+                        <!--end of admin access-->
+
+                    </ul>
+                </li>
+            <?php } ?>
+
+
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-archive"></i>
@@ -50,20 +81,23 @@ $session_data = $this->session->userdata('logged_in');
                     </li>    
 
 
-                    <!--Admin Access-->
-                    <li>
-                        <a href="<?php echo base_url(); ?>index.php/ProductManager/categories">
-                            <i class="active fa fa-plus "></i> <span>Categories</span>
-                        </a>
-                    </li>     
-                    <li>
-                        <a href="<?php echo base_url(); ?>index.php/ProductManager/createAttribute">
-                            <i class="active fa fa-plus "></i> <span>Attributes</span>
-                        </a>
-                    </li>     
-                    <!--end of admin access-->
+                    <?php if ($session_data['user_type'] == 'Admin') { ?>
+                        <!--Admin Access-->
+                        <li>
+                            <a href="<?php echo base_url(); ?>index.php/ProductManager/categories">
+                                <i class="active fa fa-plus "></i> <span>Categories</span>
+                            </a>
+                        </li>     
+                        <li>
+                            <a href="<?php echo base_url(); ?>index.php/ProductManager/createAttribute">
+                                <i class="active fa fa-plus "></i> <span>Attributes</span>
+                            </a>
+                        </li>     
+                        <!--end of admin access-->
 
-
+                        <?php
+                    }
+                    ?>
                 </ul>
             </li>
 
@@ -93,14 +127,17 @@ $session_data = $this->session->userdata('logged_in');
                             </a>
                         </li>   
                         <!--end of admin access-->
-
                     </ul>
                 </li>
 
                 <li>
-                    <?php
-                }
-                ?>
+                    <a href="<?php echo base_url(); ?>index.php/UserManager/usersCreditDebit">
+                        <i class="active fa fa-money "></i> <span>Allot Credits</span>
+                    </a>
+                </li>  
+                <?php
+            }
+            ?>
         </ul>
     </section>
     <!-- /.sidebar -->

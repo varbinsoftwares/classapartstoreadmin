@@ -18,6 +18,31 @@ class User_model extends CI_Model {
             return $data; //format the array into json data
         }
     }
+    
+    
+    
+    //get user creadit detail by id
+    function user_credits($id) {
+        $this->db->select('sum(credit) as credits');
+        $this->db->where('user_id', $id);
+        $query = $this->db->get('user_credit');
+        $credits = 0;
+        if ($query->num_rows() > 0) {
+            $credits = $query->result_array()[0]['credits'];
+        }
+
+        $debits = 0;
+        $this->db->select('sum(credit) as credits');
+        $this->db->where('user_id', $id);
+        $query = $this->db->get('user_debit');
+        if ($query->num_rows() > 0) {
+            $debits = $query->result_array()[0]['credits'];
+        }
+
+        $total = $credits - $debits;
+
+        return ($total);
+    }
 
     //check user if exist in system
     function check_user($emailid) {

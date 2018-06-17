@@ -1,6 +1,9 @@
 <?php
 $this->load->view('layout/layoutTop');
 ?>
+<?php
+$session_data = $this->session->userdata('logged_in');
+?>
 <style>
     .product_image{
         height: 200px!important;
@@ -12,8 +15,8 @@ $this->load->view('layout/layoutTop');
         background-position-x: center!important;
         background-position-y: center!important;
     }
-    
-    
+
+
     .product_image_back_slider{
         background-size: contain!important;
         background-repeat: no-repeat!important;
@@ -89,49 +92,64 @@ $this->load->view('layout/layoutTop');
                         <div class="tab-content">
 
                             <div class="tab-pane active" id="tab_0">
+                                <div class="row">
 
-                                <div class="form-group">
-                                    <label >SKU</label>
-                                    <span class="form-control" ><?php echo $product_obj->sku; ?></span>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="box box-solid">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title">Carousel</h3>
-                                        </div>
-                                        <!-- /.box-header -->
-                                        <div class="box-body">
-                                            <div id="carousel-generic" class="carousel slide" data-ride="carousel">
-                                                <ol class="carousel-indicators">
-                                                    <li data-target="#carousel-generic" data-slide-to="0" class=""></li>
-                                                    <li data-target="#carousel-generic" data-slide-to="1" class="active"></li>
-                                                    <li data-target="#carousel-generic" data-slide-to="2" class=""></li>
-                                                </ol>
-                                                <div class="carousel-inner">
-                                                    <div class="item active">
-                                                        <div class="product_image product_image_back_slider" style="background: url(<?php echo ($product_obj->file_name ? base_url() . "assets_main/productimages/" . $product_obj->file_name : base_url() . "assets_main/" . default_image); ?>)" style="height:400px!important">
-                                                        </div>  
-                                                    </div>
-                                                    <div class="item ">
-                                                        <div class="product_image product_image_back_slider" style="background: url(<?php echo ($product_obj->file_name1 ? base_url() . "assets_main/productimages/" . $product_obj->file_name1 : base_url() . "assets_main/" . default_image); ?>)"  style="height:400px!important">
-                                                        </div>  
-                                                    </div>
-                                                    <div class="item">
-                                                        <div class="product_image product_image_back_slider" style="background: url(<?php echo ($product_obj->file_name2 ? base_url() . "assets_main/productimages/" . $product_obj->file_name2 : base_url() . "assets_main/" . default_image); ?>)"  style="height:400px!important">
-                                                        </div>  
-                                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="carousel-generic" class="carousel slide" data-ride="carousel">
+                                            <ol class="carousel-indicators">
+                                                <li data-target="#carousel-generic" data-slide-to="0" class=""></li>
+                                                <li data-target="#carousel-generic" data-slide-to="1" class="active"></li>
+                                                <li data-target="#carousel-generic" data-slide-to="2" class=""></li>
+                                            </ol>
+                                            <div class="carousel-inner">
+                                                <div class="item active">
+                                                    <div class="product_image product_image_back_slider" style="background: url(<?php echo ($product_obj->file_name ? base_url() . "assets_main/productimages/" . $product_obj->file_name : base_url() . "assets_main/" . default_image); ?>)" style="height:400px!important">
+                                                    </div>  
                                                 </div>
-                                                <a class="left carousel-control" href="#carousel-generic" data-slide="prev">
-                                                    <span class="fa fa-angle-left"></span>
-                                                </a>
-                                                <a class="right carousel-control" href="#carousel-generic" data-slide="next">
-                                                    <span class="fa fa-angle-right"></span>
-                                                </a>
+                                                <div class="item ">
+                                                    <div class="product_image product_image_back_slider" style="background: url(<?php echo ($product_obj->file_name1 ? base_url() . "assets_main/productimages/" . $product_obj->file_name1 : base_url() . "assets_main/" . default_image); ?>)"  style="height:400px!important">
+                                                    </div>  
+                                                </div>
+                                                <div class="item">
+                                                    <div class="product_image product_image_back_slider" style="background: url(<?php echo ($product_obj->file_name2 ? base_url() . "assets_main/productimages/" . $product_obj->file_name2 : base_url() . "assets_main/" . default_image); ?>)"  style="height:400px!important">
+                                                    </div>  
+                                                </div>
                                             </div>
+                                            <a class="left carousel-control" href="#carousel-generic" data-slide="prev">
+                                                <span class="fa fa-angle-left"></span>
+                                            </a>
+                                            <a class="right carousel-control" href="#carousel-generic" data-slide="next">
+                                                <span class="fa fa-angle-right"></span>
+                                            </a>
                                         </div>
-                                        <!-- /.box-body -->
                                     </div>
-                                    <!-- /.box -->
+
+                                    <div class="col-md-6">
+                                        <h3><?php echo $product_obj->title; ?></h3>
+                                        <p>SKU:<?php echo $product_obj->sku; ?></p>
+                                        <p><?php echo $product_obj->short_description; ?></p>
+                                        <h4><small>Price</small> {{<?php echo $product_obj->price; ?>|currency:'Rs.'}}</h4>
+
+                                        <h4><small>Credit Limit </small> {{<?php echo $product_obj->credit_limit | 0; ?>|currency:'Rs.'}}</h4>
+
+                                        <?php
+                                        if (count($product_detail_attrs)) {
+                                            foreach ($product_detail_attrs as $key => $value) {
+                                                ?>
+                                                <li style="margin: 5px"><span class="attrkey">
+                                                        <?php echo $value['attribute']; ?>
+                                                    </span>
+                                                    <span class="attrval">
+                                                        <?php echo $value['attribute_value']; ?>
+                                                    </span>
+                                                </li>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                        <h4><small>Stock Status</small> <?php echo $product_obj->stock_status; ?></h4>
+
+                                    </div>
                                 </div>
 
 
@@ -293,25 +311,33 @@ $this->load->view('layout/layoutTop');
                                             ?>
                                         </ul>
                                     </div>
-                                    <div class="col-md-6" style="margin-top: 20px;">
 
-                                        <ul class="list-group">
+                                    <?php if ($session_data['user_type'] == 'Admin') { ?>
 
-                                            <div class="checkbox">
-                                                <label style="font-size: 20px;line-height: 31px;">
-                                                    <input type="checkbox" class="checkboxproduct" name="home_slider" <?php echo $product_obj->home_slider == "on" ? "checked" : ""; ?>> Show in Home Slider
-                                                </label>
-                                            </div>
-                                            <hr/>
-                                            <div class="checkbox">
-                                                <label style="font-size: 20px;line-height: 31px;">
-                                                    <input type="checkbox" class="checkboxproduct" name="home_bottom" <?php echo $product_obj->home_bottom == "on" ? "checked" : ""; ?>> Show in Home Bottom
-                                                </label>
-                                            </div>
+                                        <div class="col-md-6" style="margin-top: 20px;">
+
+                                            <ul class="list-group">
+
+                                                <div class="checkbox">
+                                                    <label style="font-size: 20px;line-height: 31px;">
+                                                        <input type="checkbox" class="checkboxproduct" name="home_slider" <?php echo $product_obj->home_slider == "on" ? "checked" : ""; ?>> Show in Home Slider
+                                                    </label>
+                                                </div>
+                                                <hr/>
+                                                <div class="checkbox">
+                                                    <label style="font-size: 20px;line-height: 31px;">
+                                                        <input type="checkbox" class="checkboxproduct" name="home_bottom" <?php echo $product_obj->home_bottom == "on" ? "checked" : ""; ?>> Show in Home Bottom
+                                                    </label>
+                                                </div>
 
 
-                                        </ul>
-                                    </div>
+                                            </ul>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
+
+
                                 </div>
                             </div>
                             <!-- /.tab-pane -->
@@ -329,8 +355,7 @@ $this->load->view('layout/layoutTop');
     </div>
 
 
-    <!--related products-->
-
+    <!--veriant products-->
     <div class="box box-danger">
         <div class="box-header">
             <h3 class="box-title">
@@ -395,48 +420,96 @@ $this->load->view('layout/layoutTop');
             </div>
         </div>
     </div>
-    <!--end of related products-->
+    <!--end of verient products-->
 
 
+    <?php if ($session_data['user_type'] == 'Admin') { ?>
 
-    <!--related products-->
-
-    <div class="box box-danger">
-        <div class="box-header">
-            <h3 class="box-title">Select Related Products</h3>
-        </div>
-        <div class="box-body">
-            <div class="row">
-                <?php
-                foreach ($related_products as $key => $value) {
-                    ?>
-                    <div class="col-md-6 ">
-                        <div class="panel panel-default">
-                            <div class="media" style="    padding: 10px;
-                                 ">
-                                <div class="media-left">
-                                    <a href="#">
-                                        <img class="media-object" src="<?php echo ($value->file_name ? base_url() . "assets_main/productimages/" . $value->file_name : base_url() . "assets_main/" . default_image); ?>" alt="..." style="    width: auto;
-                                             height: 93px;">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading"><?php echo $value->title; ?></h4>
-                                    <p style="font-size: 12px;"><?php echo $value->short_description; ?></p>
-                                    <p >{{<?php echo $value->price; ?>|currency:" "}}</p>
+        <!--related products select-->
+        <div class="box box-danger">
+            <div class="box-header">
+                <h3 class="box-title">
+                    Select Related Products
+                </h3>
+            </div>
+            <div class="box-body">
+                <form action="#" method="post">
+                    <div class="row">
+                        <?php
+                        foreach ($related_products as $key => $value) {
+                            ?>
+                            <div class="col-md-6 ">
+                                <div class="panel panel-default">
+                                    <div class="media" style="    padding: 10px;">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object" src="<?php echo ($value->file_name ? base_url() . "assets_main/productimages/" . $value->file_name : base_url() . "assets_main/" . default_image); ?>" alt="..." style="    width: auto; height: 93px;">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading"><?php echo $value->title; ?></h4>
+                                            <p style="font-size: 12px;"><?php echo $value->short_description; ?></p>
+                                            <p >{{<?php echo $value->price; ?>|currency:" "}}</p>
+                                            <input type="checkbox" name="related_product_id[]" value="<?php echo $value->related_product_id; ?>">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+
+
+                        <?php }
+                        ?>
                     </div>
-
-
-                <?php }
-                ?>
+                    <button class="btn btn-danger" type="submit" name="remove_realted_products">Remove Related Products</button>
+                </form>
             </div>
         </div>
-    </div>
-    <!--end of related products-->
+        <!--end of related products-->
 
+
+        <!--related products select-->
+        <div class="box box-danger">
+            <div class="box-header">
+                <h3 class="box-title">
+                    Select Related Products
+                </h3>
+            </div>
+            <div class="box-body">
+                <form action="#" method="post">
+                    <div class="row">
+                        <?php
+                        foreach ($related_products_check as $key => $value) {
+                            ?>
+                            <div class="col-md-6 ">
+                                <div class="panel panel-default">
+                                    <div class="media" style="    padding: 10px;">
+                                        <div class="media-left">
+                                            <a href="#">
+                                                <img class="media-object" src="<?php echo ($value->file_name ? base_url() . "assets_main/productimages/" . $value->file_name : base_url() . "assets_main/" . default_image); ?>" alt="..." style="    width: auto; height: 93px;">
+                                            </a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading"><?php echo $value->title; ?></h4>
+                                            <p style="font-size: 12px;"><?php echo $value->short_description; ?></p>
+                                            <p >{{<?php echo $value->price; ?>|currency:" "}}</p>
+                                            <input type="checkbox" name="related_product_id[]" value="<?php echo $value->product_id; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        <?php }
+                        ?>
+                    </div>
+                    <button class="btn btn-primary" type="submit" name="add_realted_products">Add Related Products</button>
+                </form>
+            </div>
+        </div>
+        <!--end of related products-->
+        <?php
+    }
+    ?>
 
 
 

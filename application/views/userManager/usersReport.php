@@ -92,7 +92,7 @@ function userReportFunction($users) {
                             </td>
 
                             <td>
-                                <a href="<?php echo '../userManager/profile_update_info/' . $value->id; ?>" class="btn btn-danger"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="<?php echo '../userManager/user_details/' . $value->id; ?>" class="btn btn-danger"><i class="fa fa-eye "></i> View</a>
                             </td>
                         </tr>
                         <?php
