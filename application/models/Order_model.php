@@ -21,12 +21,40 @@ class Order_model extends CI_Model {
         $query = $this->db->get('user_order');
         $order_details = $query->row();
         if ($order_details) {
+
             $order_data['order_data'] = $order_details;
             $this->db->where('order_id', $order_details->id);
             $query = $this->db->get('cart');
             $cart_items = $query->result();
             $order_data['cart_data'] = $cart_items;
         }
+        return $order_data;
+    }
+
+    public function getVendorsOrder($key_id) {
+        $order_data = array();
+        $this->db->where('order_key', $key_id);
+        $query = $this->db->get('user_order');
+        $order_details = $query->row();
+        $venderarray = array();
+        if ($order_details) {
+            $order_id = $order_details->id;
+            $order_data['order_data'] = $order_details;
+            $this->db->where('order_id', $order_id);
+            $query = $this->db->get('vendor_order');
+            $vendor_orders = $query->result();
+            $order_data['vendor'] = array();
+            foreach ($vendor_orders as $key => $value) {
+                $vid = $value->vendor_id;
+                $order_data['vendor'][$vid] = array();
+                $order_data['vendor'][$vid]['vendor'] = $value;
+                $this->db->where('order_id', $order_id);
+                $this->db->where('vendor_id', $vid);
+                $query = $this->db->get('cart');
+                $order_data['vendor'][$vid]['cart_items'] = $query->result();
+            }
+        }
+
         return $order_data;
     }
 

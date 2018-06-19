@@ -31,7 +31,11 @@ class Order extends CI_Controller {
         }
 
         $order_details = $this->Order_model->getOrderDetails($order_key, 'key');
-        
+
+        $vendor_order_details = $this->Order_model->getVendorsOrder($order_key);
+
+        $data['vendor_order'] = $vendor_order_details;
+
         if ($order_details) {
             $order_id = $order_details['order_data']->id;
             $data['ordersdetails'] = $order_details;
@@ -71,20 +75,24 @@ class Order extends CI_Controller {
 
         $this->load->view('Order/orderdetails', $data);
     }
-    
+
     public function remove_order_status($status_id, $orderkey) {
         $this->db->delete('user_order_status', array('id' => $status_id));
         redirect("Order/orderdetails/$orderkey");
     }
-    
 
     //order list accroding to user type
     public function orderslist() {
         $this->db->order_by('id', 'desc');
-        $query = $this->db->get('user_order');
+        if ($this->user_type == 'Admin') {
+            $query = $this->db->get('user_order');
+        }
+        if ($this->user_type == 'Vendor') {
+            $this->db->where('vendor_id', $this->user_id);
+            $query = $this->db->get('vendor_order');
+        }
         $orderlist = $query->result();
         $data['orderslist'] = $orderlist;
-
         $this->load->view('Order/orderslist', $data);
     }
 

@@ -1,19 +1,35 @@
 <?php
 $this->load->view('layout/layoutTop');
 ?>
+<style>
+    .vendororder{
+        background: #fff;
+        border-bottom: 2px solid #c5c5c5;
+        border-top: 4px solid #000;
+    }
+    .vendor-text{
+        float: left;
+        height: 39px;
+        /* vertical-align: middle; */
+        line-height: 37px;
+        font-size: 21px;
+        padding-right: 15px;
+        border-right: 1px solid #c5c5c5;
+        margin-right: 12px;
+    }
+</style>
 
-
-<section class="content" style="min-height: auto;">
+<!--<section class="content" style="min-height: auto;">
 
     <div class="row">
-        <!-- title row -->
+         title row 
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Order No.:<?php echo $ordersdetails['order_data']->order_no; ?></h3>
                 </div>
-                <!-- /.box-header -->
-                <!-- form start -->
+                 /.box-header 
+                 form start 
                 <form role="form" action="#" method="post">
                     <div class="box-body">
 
@@ -46,7 +62,7 @@ $this->load->view('layout/layoutTop');
                         </div>
 
                     </div>
-                    <!-- /.box-body -->
+                     /.box-body 
 
                     <div class="box-footer">
                         <div class="col-md-12">
@@ -68,34 +84,34 @@ $this->load->view('layout/layoutTop');
                 ?>
 
                 <ul class="timeline">
-                    <!-- timeline time label -->
+                     timeline time label 
                     <li class="time-label">
                         <span class="bg-red">
-                            <?php echo $value->c_date;?>
+                            <?php echo $value->c_date; ?>
                         </span>
                     </li>
-                    <!-- /.timeline-label -->
+                     /.timeline-label 
 
-                    <!-- timeline item -->
+                     timeline item 
                     <li>
-                        <!-- timeline icon -->
+                         timeline icon 
                         <i class="fa fa-envelope bg-blue"></i>
                         <div class="timeline-item">
-                            <span class="time"><i class="fa fa-clock-o"></i> <?php echo $value->c_time;?></span>
+                            <span class="time"><i class="fa fa-clock-o"></i> <?php echo $value->c_time; ?></span>
 
-                            <h3 class="timeline-header"><a href="#"><?php echo $value->status?></a></h3>
+                            <h3 class="timeline-header"><a href="#"><?php echo $value->status ?></a></h3>
 
                             <div class="timeline-body">
-                               <?php echo $value->remark;?><br/>
-                               <?php echo $value->description;?>
+                                <?php echo $value->remark; ?><br/>
+                                <?php echo $value->description; ?>
                             </div>
 
                             <div class="timeline-footer">
-                                <a class="btn btn-danger btn-xs" href="<?php echo site_url('Order/remove_order_status/'.$value->id."/".$order_key);?>"><i class="fa fa-trash"></i> Remove</a>
+                                <a class="btn btn-danger btn-xs" href="<?php echo site_url('Order/remove_order_status/' . $value->id . "/" . $order_key); ?>"><i class="fa fa-trash"></i> Remove</a>
                             </div>
                         </div>
                     </li>
-                    <!-- END timeline item -->
+                     END timeline item 
 
                 </ul>
 
@@ -105,10 +121,13 @@ $this->load->view('layout/layoutTop');
 
         </div>
     </div>
-</div>
+</div>-->
 
 <!-- Main content -->
-<section class="invoice">
+<section class="content "  style="min-height: auto;">
+    
+    <div class="col-md-12">
+    
     <!-- title row -->
     <div class="row">
         <div class="col-xs-12">
@@ -162,34 +181,63 @@ $this->load->view('layout/layoutTop');
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($ordersdetails['cart_data'] as $key => $product) {
+                    foreach ($vendor_order['vendor'] as $key => $voc) {
+                        $vendor = $voc['vendor'];
                         ?>
-                        <tr>
+                        <tr class="vendororder" >
+                            <td colspan="5">
+                                <span class="vendor-text">Vendor</span>
+                                <b>
+                                    <?php
+                                    echo $vendor->vendor_name;
+                                    ?>
+                                </b><br/>
+                                <?php
+                                echo $vendor->vendor_email;
+                                ?><br/>
+                            </td>
                             <td>
-                                <?php echo $key + 1; ?>
-                            </td>
+                                <p>   
+                                    Sub Order No. : <b>
+                                        <?php
+                                        echo $vendor->vendor_order_no;
+                                        ?>
+                                    </b>
+                                </p>
 
-                            <td style="width: 60px"> 
-                                <img src=" <?php echo $product->file_name; ?>" style="height: 50px;"/>
-                            </td>
-
-                            <td style="width: 200px;">
-                                <?php echo $product->title; ?>
-                            </td>
-
-                            <td style="text-align: right">
-                                <?php echo $product->price; ?>
-                            </td>
-
-                            <td style="text-align: right">
-                                <?php echo $product->quantity; ?>
-                            </td>
-
-                            <td style="text-align: right;">
-                                <?php echo $product->total_price; ?>
                             </td>
                         </tr>
+
                         <?php
+                        foreach ($voc['cart_items'] as $key => $product) {
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo $key + 1; ?>
+                                </td>
+
+                                <td style="width: 60px"> 
+                                    <img src=" <?php echo $product->file_name; ?>" style="height: 50px;"/>
+                                </td>
+
+                                <td style="width: 200px;">
+                                    <?php echo $product->title; ?>
+                                </td>
+
+                                <td style="text-align: right">
+                                    <?php echo $product->price; ?>
+                                </td>
+
+                                <td style="text-align: right">
+                                    <?php echo $product->quantity; ?>
+                                </td>
+
+                                <td style="text-align: right;">
+                                    <?php echo $product->total_price; ?>
+                                </td>
+                            </tr>
+                            <?php
+                        }
                     }
                     ?>
 
@@ -202,53 +250,58 @@ $this->load->view('layout/layoutTop');
     <!-- /.row -->
 
     <div class="row">
-        <p class="lead" style="text-align: right">Amount Description</p>
+        <div class="col-md-12">
+            <p class="lead" style="text-align: right">Amount Description</p>
 
-        <div class="table-responsive">
-            <table class="table">
-                <tr>
-                    <td colspan="3"  rowspan="4" style="font-size: 12px;text-align: right">
-                        <b>Total Amount in Words:</b><br/>
-                        <span style="text-transform: capitalize"> <?php echo $ordersdetails['order_data']->amount_in_word; ?></span>
-                    </td>
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <td colspan="3"  rowspan="4" style="font-size: 12px;text-align: right">
+                            <b>Total Amount in Words:</b><br/>
+                            <span style="text-transform: capitalize"> <?php echo $ordersdetails['order_data']->amount_in_word; ?></span>
+                        </td>
 
-                </tr>
-                <tr style="font-weight: bold;">
-                    <td colspan="2" style="text-align: right">Total</td>
-                    <td style="text-align: right;width: 60px"><?php echo $ordersdetails['order_data']->sub_total_price; ?> </td>
-                </tr>
-                <tr  style="font-weight: bold;">
-                    <td colspan="2" style="text-align: right">Credit Used</td>
-                    <td style="text-align: right;width: 60px"><?php echo $ordersdetails['order_data']->credit_price; ?> </td>
-                </tr>
-                <tr  style="font-weight: bold;">
-                    <td colspan="2" style="text-align: right">Total Amount</td>
-                    <td style="text-align: right;width: 60px"><?php echo $ordersdetails['order_data']->total_price; ?> </td>
-                </tr>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td colspan="2" style="text-align: right">Total</td>
+                        <td style="text-align: right;width: 60px"><?php echo $ordersdetails['order_data']->sub_total_price; ?> </td>
+                    </tr>
+                    <tr  style="font-weight: bold;">
+                        <td colspan="2" style="text-align: right">Credit Used</td>
+                        <td style="text-align: right;width: 60px"><?php echo $ordersdetails['order_data']->credit_price; ?> </td>
+                    </tr>
+                    <tr  style="font-weight: bold;">
+                        <td colspan="2" style="text-align: right">Total Amount</td>
+                        <td style="text-align: right;width: 60px"><?php echo $ordersdetails['order_data']->total_price; ?> </td>
+                    </tr>
 
-            </table>
+                </table>
+            </div>
         </div>
     </div>
-
-
-
-
     <!-- /.row -->
 
     <!-- this row will not appear when printing -->
     <div class="row no-print">
         <div class="col-xs-12">
             <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
-            <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment
+            <!--<button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment-->
             </button>
-            <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
-                <i class="fa fa-download"></i> Generate PDF
-            </button>
+            <!--            <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
+                            <i class="fa fa-download"></i> Generate PDF
+                        </button>-->
         </div>
     </div>
+    
+    </div>
+    
 </section>
 <!-- /.content -->
 <div class="clearfix"></div>
+
+
+
+
 
 
 
