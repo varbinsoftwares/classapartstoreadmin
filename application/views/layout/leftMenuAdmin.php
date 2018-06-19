@@ -30,7 +30,7 @@ $session_data = $this->session->userdata('logged_in');
 
 
 
-            <?php if ($session_data['user_type'] == 'Admin') { ?>
+           
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-list"></i>
@@ -55,7 +55,7 @@ $session_data = $this->session->userdata('logged_in');
 
                     </ul>
                 </li>
-            <?php } ?>
+           
 
 
 

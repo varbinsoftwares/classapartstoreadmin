@@ -88,8 +88,11 @@ class Order extends CI_Controller {
             $query = $this->db->get('user_order');
         }
         if ($this->user_type == 'Vendor') {
+            $this->db->select('o.*');
+            $this->db->join('user_order as o', 'o.id = vo.order_id', 'left');
             $this->db->where('vendor_id', $this->user_id);
-            $query = $this->db->get('vendor_order');
+            $this->db->from('vendor_order as vo');
+            $query = $this->db->get();
         }
         $orderlist = $query->result();
         $data['orderslist'] = $orderlist;
