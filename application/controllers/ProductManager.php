@@ -257,7 +257,7 @@ class ProductManager extends CI_Controller {
         $data['product_attributes'] = $product_model->product_attribute_list($product_id);
 
         $data['attributefunction'] = $product_model;
-        
+
         $data['product_detail_attrs'] = $product_model->productAttributes($product_id);
 
         $this->db->select('*');
@@ -518,6 +518,48 @@ class ProductManager extends CI_Controller {
             $data['product_data'] = $this->Product_model->query_exe($query);
             $this->load->view('productManager/productReport', $data);
         }
+    }
+
+    //Add product function
+    function add_sliders() {
+        $query = $this->db->get('sliders');
+        $data['sliders'] = $query->result();
+        if (isset($_POST['submit'])) {
+            if (!empty($_FILES['picture']['name'])) {
+                $config['upload_path'] = 'assets_main/sliderimages';
+                $config['allowed_types'] = '*';
+                $temp1 = rand(100, 1000000);
+                $ext1 = explode('.', $_FILES['picture']['name']);
+                $ext = strtolower(end($ext1));
+                $file_newname = $temp1 . "1." . $ext;
+                $config['file_name'] = $file_newname;
+                //Load upload library and initialize configuration
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('picture')) {
+                    $uploadData = $this->upload->data();
+                    $picture = $uploadData['file_name'];
+                } else {
+                    $picture = '';
+                }
+            } else {
+                $picture = '';
+            }
+            $user_id = $this->session->userdata('logged_in')['login_id'];
+            $post_data = array(
+                'title' => $this->input->post('title'),
+                'line1' => $this->input->post('line1'),
+                'line2' => $this->input->post('line2'),
+                'link' => $this->input->post('link'),
+                'link_text' => $this->input->post('link_text'),
+                'file_name' => $file_newname);
+
+            print_r($post_data);
+            $this->db->insert('sliders', $post_data);
+            $last_id = $this->db->insert_id();
+            redirect('ProductManager/add_sliders');
+        }
+        $this->load->view('productManager/add_sliders', $data);
     }
 
 }

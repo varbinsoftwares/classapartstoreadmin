@@ -74,7 +74,6 @@ class Order extends CI_Controller {
 
     //order list accroding to user type
     public function orderslist() {
-
         if ($this->user_type == 'Admin') {
             $this->db->order_by('id', 'desc');
             $query = $this->db->get('user_order');
@@ -131,7 +130,7 @@ class Order extends CI_Controller {
         if ($this->user_id != $vendor_order_details->vendor_id) {
             redirect('UserManager/not_granted');
         }
-        
+
 
         $this->db->where('order_id', $order_details->id);
         $this->db->where('vendor_id', $this->user_id);
@@ -184,6 +183,50 @@ class Order extends CI_Controller {
     public function remove_vendor_order_status($status_id, $order_id) {
         $this->db->delete('vendor_order_status', array('id' => $status_id));
         redirect("Order/vendor_order_details/$order_id");
+    }
+
+    //order analisys
+    public function orderAnalysis() {
+        if ($this->user_type != 'Admin') {
+            redirect('UserManager/not_granted');
+        }
+
+        $this->db->order_by('id', 'desc');
+        $query = $this->db->get('user_order');
+        $orderlist = $query->result_array();
+        $orderslistr = [];
+
+        foreach ($orderlist as $key => $value) {
+            $this->db->order_by('id', 'desc');
+            $this->db->where('order_id', $value['id']);
+            $query = $this->db->get('user_order_status');
+            $status = $query->row();
+            $value['status'] = $status ? $status->status : $value['status'];
+            array_push($orderslistr, $value);
+        }
+
+        $this->db->order_by('id', 'desc');
+        $query = $this->db->get('admin_users');
+        $orderlist = $query->result_array();
+
+
+        $data['total_order'] = count($orderslistr);
+
+        $data['orderslist'] = $orderslistr;
+
+        $this->load->library('JsonSorting', $orderslistr);
+
+        $orderstatus = $this->jsonsorting->collect_data('status');
+
+        $orderuser = $this->jsonsorting->collect_data('name');
+
+        $orderdate = $this->jsonsorting->collect_data('order_date');
+
+        $data['orderstatus'] = $orderstatus;
+        $data['orderuser'] = $orderuser;
+        $data['orderdate'] = $orderdate;
+
+        $this->load->view('Order/orderanalysis', $data);
     }
 
 }

@@ -53,6 +53,7 @@ class Order_model extends CI_Model {
                 $this->db->where('vendor_order_id', $value->id);
                 $query = $this->db->get('vendor_order_status');
                 $status = $query->row();
+                
                 $order_data['vendor'][$vid]['status'] = $status ? $status->status : $value->status;
                 $order_data['vendor'][$vid]['remark'] = $status ? $status->remark : $value->status;
                 
