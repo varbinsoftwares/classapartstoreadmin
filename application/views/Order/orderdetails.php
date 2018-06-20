@@ -202,11 +202,10 @@ $this->load->view('layout/layoutTop');
                                             ?>
                                         </b>
                                         <br/>
-                                        Total Price : <b>
-                                            {{<?php
-                                            echo $vendor->total_price;
-                                            ?>|currency:' '}}
-                                        </b>
+                                       
+                                            <?php
+                                            echo $voc['remark'];
+                                            ?>
                                     </p>
                                 </td>
                                 <td>
@@ -223,6 +222,7 @@ $this->load->view('layout/layoutTop');
                                             ?>|currency:' '}}
                                         </b>
                                     </p>
+                                    <a class="btn btn-primary btn-xs" href="<?php echo site_url('Order/vendor_order_details/'.$vendor->id);?>">Process As Vendor</a>
                                 </td>
                                 
                             </tr>

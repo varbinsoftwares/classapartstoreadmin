@@ -131,9 +131,7 @@ class Order extends CI_Controller {
         if ($this->user_id != $vendor_order_details->vendor_id) {
             redirect('UserManager/not_granted');
         }
-        if ($this->user_type != 'Vendor') {
-            redirect('UserManager/not_granted');
-        }
+        
 
         $this->db->where('order_id', $order_details->id);
         $this->db->where('vendor_id', $this->user_id);
