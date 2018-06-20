@@ -135,6 +135,32 @@ $session_data = $this->session->userdata('logged_in');
                         <i class="active fa fa-money "></i> <span>Allot Credits</span>
                     </a>
                 </li>  
+                
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-cogs"></i>
+                        <span>Settings</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <!--Admin Access-->
+                        <li>
+                            <a href="<?php echo base_url(); ?>index.php/ProductManager/add_sliders">
+                                <i class="active fa fa-plus "></i> <span>Add Sliders</span>
+                            </a>
+                        </li>   
+<!--                        <li>
+                            <a href="<?php echo base_url(); ?>index.php/UserManager/usersReport">
+                                <i class="active fa fa-plus "></i> <span>Users Reports</span>
+                            </a>
+                        </li>   -->
+                        <!--end of admin access-->
+                    </ul>
+                </li>
+
+                
                 <?php
             }
             ?>
