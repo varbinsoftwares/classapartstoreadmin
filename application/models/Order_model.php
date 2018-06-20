@@ -48,6 +48,13 @@ class Order_model extends CI_Model {
                 $vid = $value->vendor_id;
                 $order_data['vendor'][$vid] = array();
                 $order_data['vendor'][$vid]['vendor'] = $value;
+                
+                $this->db->order_by('id', 'desc');
+                $this->db->where('vendor_order_id', $value->id);
+                $query = $this->db->get('vendor_order_status');
+                $status = $query->row();
+                $order_data['vendor'][$vid]['status'] = $status ? $status->status : $value->status;
+                
                 $this->db->where('order_id', $order_id);
                 $this->db->where('vendor_id', $vid);
                 $query = $this->db->get('cart');

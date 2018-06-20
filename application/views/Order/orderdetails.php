@@ -19,17 +19,16 @@ $this->load->view('layout/layoutTop');
     }
 </style>
 
-<!--<section class="content" style="min-height: auto;">
+<section class="content" style="min-height: auto;">
 
     <div class="row">
-         title row 
+        <!--title row--> 
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Order No.:<?php echo $ordersdetails['order_data']->order_no; ?></h3>
                 </div>
-                 /.box-header 
-                 form start 
+
                 <form role="form" action="#" method="post">
                     <div class="box-body">
 
@@ -62,7 +61,7 @@ $this->load->view('layout/layoutTop');
                         </div>
 
                     </div>
-                     /.box-body 
+                    <!--/.box-body--> 
 
                     <div class="box-footer">
                         <div class="col-md-12">
@@ -79,49 +78,49 @@ $this->load->view('layout/layoutTop');
     <div class="col-md-12">
         <div class="col-md-12">
 
-<?php
-foreach ($user_order_status as $key => $value) {
-    ?>
+            <?php
+            foreach ($user_order_status as $key => $value) {
+                ?>
 
-                            <ul class="timeline">
-                                 timeline time label 
-                                <li class="time-label">
-                                    <span class="bg-red">
-    <?php echo $value->c_date; ?>
-                                    </span>
-                                </li>
-                                 /.timeline-label 
+                <ul class="timeline">
+                    <!--timeline time label--> 
+                    <li class="time-label">
+                        <span class="bg-red">
+                            <?php echo $value->c_date; ?>
+                        </span>
+                    </li>
+                    <!--/.timeline-label--> 
 
-                                 timeline item 
-                                <li>
-                                     timeline icon 
-                                    <i class="fa fa-envelope bg-blue"></i>
-                                    <div class="timeline-item">
-                                        <span class="time"><i class="fa fa-clock-o"></i> <?php echo $value->c_time; ?></span>
+                    <!--timeline item--> 
+                    <li>
+                        <!--timeline icon--> 
+                        <i class="fa fa-envelope bg-blue"></i>
+                        <div class="timeline-item">
+                            <span class="time"><i class="fa fa-clock-o"></i> <?php echo $value->c_time; ?></span>
 
-                                        <h3 class="timeline-header"><a href="#"><?php echo $value->status ?></a></h3>
+                            <h3 class="timeline-header"><a href="#"><?php echo $value->status ?></a></h3>
 
-                                        <div class="timeline-body">
-    <?php echo $value->remark; ?><br/>
-    <?php echo $value->description; ?>
-                                        </div>
+                            <div class="timeline-body">
+                                <?php echo $value->remark; ?><br/>
+                                <?php echo $value->description; ?>
+                            </div>
 
-                                        <div class="timeline-footer">
-                                            <a class="btn btn-danger btn-xs" href="<?php echo site_url('Order/remove_order_status/' . $value->id . "/" . $order_key); ?>"><i class="fa fa-trash"></i> Remove</a>
-                                        </div>
-                                    </div>
-                                </li>
-                                 END timeline item 
+                            <div class="timeline-footer">
+                                <a class="btn btn-danger btn-xs" href="<?php echo site_url('Order/remove_order_status/' . $value->id . "/" . $order_key); ?>"><i class="fa fa-trash"></i> Remove</a>
+                            </div>
+                        </div>
+                    </li>
+                    <!--END timeline item--> 
 
-                            </ul>
+                </ul>
 
-    <?php
-}
-?>
+                <?php
+            }
+            ?>
 
         </div>
     </div>
-</div>-->
+</div>
 
 <!-- Main content -->
 <section class="content "  style="min-height: auto;">
@@ -173,7 +172,6 @@ foreach ($user_order_status as $key => $value) {
                         <tr style="font-weight: bold">
                             <td style="width: 20px;text-align: center">S.No.</td>
                             <td colspan="2"  style="text-align: center">Product</td>
-
                             <td style="text-align: right;width: 100px"">Price<br/><span style="font-size: 10px">(In INR)</span></td>
                             <td style="text-align: right;width: 60px"">Qnty.</td>
                             <td style="text-align: right;width: 100px">Total<br/><span style="font-size: 10px">(In INR)</span></td>
@@ -185,7 +183,7 @@ foreach ($user_order_status as $key => $value) {
                             $vendor = $voc['vendor'];
                             ?>
                             <tr class="vendororder" >
-                                <td colspan="5">
+                                <td colspan="3">
                                     <span class="vendor-text">Vendor</span>
                                     <b>
                                         <?php
@@ -195,6 +193,21 @@ foreach ($user_order_status as $key => $value) {
                                     <?php
                                     echo $vendor->vendor_email;
                                     ?><br/>
+                                </td>
+                                <td colspan="2">
+                                    <p>   
+                                        Status : <b>
+                                            <?php
+                                            echo $voc['status'];
+                                            ?>
+                                        </b>
+                                        <br/>
+                                        Total Price : <b>
+                                            {{<?php
+                                            echo $vendor->total_price;
+                                            ?>|currency:' '}}
+                                        </b>
+                                    </p>
                                 </td>
                                 <td>
                                     <p>   
@@ -210,8 +223,8 @@ foreach ($user_order_status as $key => $value) {
                                             ?>|currency:' '}}
                                         </b>
                                     </p>
-
                                 </td>
+                                
                             </tr>
 
                             <?php
@@ -245,15 +258,16 @@ foreach ($user_order_status as $key => $value) {
                                 <?php
                             }
                             ?>
-                            <tr style="font-weight: bold;">
-                                <td colspan="4">
+                            <tr style="font-weight: bold;background: #fff;">
+                                <td colspan="4" style="text-align: right;">
+                                    Total
                                 </td>
                                 <td style="text-align: right;">
-                                    {{<?php echo $vendor->total_quantity;?>}}
+                                    {{<?php echo $vendor->total_quantity; ?>}}
                                 </td>
-                                
+
                                 <td style="text-align: right;">
-                                    {{<?php echo $vendor->total_price;?>|currency:' '}}
+                                    {{<?php echo $vendor->total_price; ?>|currency:' '}}
                                 </td>
                             </tr>
                             <?php
