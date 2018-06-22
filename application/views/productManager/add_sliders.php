@@ -17,108 +17,140 @@ $this->load->view('layout/layoutTop');
 <section class="content" ng-controller="productController">
     <div class="">
 
-        <div class="box box-danger">
-            <div class="box-header">
-                <h3 class="box-title">Add Product</h3>
-            </div>
-            <div class="box-body">
-
-                <?php echo $this->session->flashdata('success_msg'); ?>
-                <?php echo $this->session->flashdata('error_msg'); ?>
-                <form action="#" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label >Title</label>
-                        <input type="text" class="form-control" name="title"  placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label >Line 1</label>
-                        <input type="text" class="form-control" name="line1"  placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label >Line 2</label>
-                        <input type="text" class="form-control" name="line2"   placeholder="">
-                    </div>
-
-                    <div class="form-group">
-                        <label >Link</label>
-                        <input type="text" class="form-control" name="link"  placeholder="">
-                    </div>
-
-                    <div class="form-group">
-                        <label >Link Text</label>
-                        <input type="text" class="form-control" name="link_text"   placeholder="">
-                    </div>
-
-                    <div class="form-group">
-                        <label >Position</label>
-                        <select name="position" class="form-control">
-                            <option>Left</option>
-                            <option>Right</option>
-                        </select>
-
-                    </div>
 
 
-                    <!--pictures-->
+        <!-- Custom Tabs -->
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#tab_1" data-toggle="tab">Sliders</a>
+                </li>
+                <li>
+                    <a href="#tab_2" data-toggle="tab">Add New</a>
+                </li>
+
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="thumbnail">
-                                <div class="product_image product_image_back" style="background: url(<?php echo (base_url() . "assets_main/" . default_image); ?>)">
+                        <?php
+                        foreach ($sliders as $key => $value) {
+                            ?>
+                            <div class="col-md-12">
+                                <div class="box box-solid">
+                                    <div class="box-body">
+                                        <div class="col-md-6">
+                                            <img src="<?php echo (base_url() . "assets_main/sliderimages/" . $value->file_name ); ?>" style="    width: 100%;">
+                                        </div>
+                                        <div class="col-md-5">
+                                            <h3>
+                                                <?php
+                                                echo $value->title;
+                                                ?>
+                                            </h3>
+                                            <p>
+                                                <?php
+                                                echo $value->line1;
+                                                ?>
+                                            </p>
+                                            <p>
+                                                <?php
+                                                echo $value->line2;
+                                                ?>
+                                            </p>
+                                            <button class="btn btn-primary" style="margin: 10px;" href=" <?php echo $value->link; ?>">
+                                                <?php echo $value->link_text; ?>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="caption">
-                                    <div class="form-group">
-                                        <label for="image1">Upload Primary Image</label>
-                                        <input type="file" name="picture" />           
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_2">
+                    <form action="#" method="post" enctype="multipart/form-data">
+                        <div class="form-group sliderbox-panel">
+                            <div class="col-md-9">
+                                <label >Title</label>
+                                <input type="text" class="form-control" name="title"  placeholder="">
+                            </div>
+                            <div class="col-md-3">
+                                <label >Title color Code</label>
+                                <input type="text"  name="title_color"  class="form-control my-colorpicker1 colorpicker-element">
+                            </div>
+                        </div>
+                       
+                        <div class="form-group sliderbox-panel">
+                            <div class="col-md-9">
+                                <label >Line 1</label>
+                                <input type="text" class="form-control" name="line1"  placeholder="">
+                            </div>
+                            <div class="col-md-3">
+                                <label >Line 1 color Code</label>
+                                <input type="text"  name="line1_color"  class="form-control my-colorpicker1 colorpicker-element">
+                            </div>
+                        </div>
+                        <div class="form-group sliderbox-panel">
+                            <div class="col-md-9">
+                                <label >Line 2</label>
+                                <input type="text" class="form-control" name="line2"   placeholder="">
+                            </div>
+                            <div class="col-md-3">
+                                <label >Line 1 color Code</label>
+                                <input type="text"  name="line2_color"  class="form-control my-colorpicker1 colorpicker-element">
+                            </div>
+                        </div>
+
+                        <div class="form-group sliderbox-panel">
+                            <div class="col-md-9">
+                                <label >Link</label>
+                                <input type="text" class="form-control" name="link"  placeholder="">
+                            </div>
+                            <div class="col-md-3">
+                                <label >Link Text</label>
+                                <input type="text" class="form-control" name="link_text"   placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label >Position</label>
+                            <select name="position" class="form-control">
+                                <option>Left</option>
+                                <option>Right</option>
+                            </select>
+
+                        </div>
+
+
+                        <!--pictures-->
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="thumbnail">
+                                    <div class="product_image product_image_back" style="background: url(<?php echo (base_url() . "assets_main/" . default_image); ?>)">
+                                    </div>
+                                    <div class="caption">
+                                        <div class="form-group">
+                                            <label for="image1">Upload Primary Image</label>
+                                            <input type="file" name="picture" />           
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--pictures-->
-                    <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-                </form>
-                <table>
-                    <?php
-                    foreach ($sliders as $key => $value) {
-                        
-                        ?>
-
-                        <tr>
-                            <td>
-                                <img src="<?php echo (base_url() . "assets_main/sliderimages/".$value->file_name ); ?>" style="height: 120px;">
-                            </td>
-                            <td>
-                                <h3>
-                                    <?php
-                                    echo $value->title;
-                                    ?>
-                                </h3>
-                                <p>
-                                    <?php
-                                    echo $value->line1;
-                                    ?>
-                                </p>
-                                <p>
-                                    <?php
-                                    echo $value->line2;
-                                    ?>
-                                </p>
-                            </td>
-                            <td>
-                               <button class="btn btn-primary" style="margin: 10px;" href=" <?php echo $value->link; ?>">
-                                   <?php echo $value->link_text; ?>
-                               </button>
-                            </td> 
-                        </tr>
-                        <?php
-                    }
-                    ?>
-                </table>
-
+                        <!--pictures-->
+                        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <!-- /.tab-pane -->
 
             </div>
+            <!-- /.tab-content -->
         </div>
-
+        <!-- nav-tabs-custom -->
 
     </div>
 
@@ -136,7 +168,10 @@ $this->load->view('layout/layoutTop');
 
 
 
+
+
 <script src="<?php echo base_url(); ?>assets_main/tinymce/js/tinymce/tinymce.min.js"></script>
+
 <?php
 $this->load->view('layout/layoutFooter');
 ?> 
