@@ -196,21 +196,38 @@ class Order extends CI_Controller {
         $orderlist = $query->result_array();
         $orderslistr = [];
 
+        $total_amount = 0;
+        
+        
         foreach ($orderlist as $key => $value) {
             $this->db->order_by('id', 'desc');
             $this->db->where('order_id', $value['id']);
+            
+            $total_amount += $value['total_price'];
+            
             $query = $this->db->get('user_order_status');
             $status = $query->row();
             $value['status'] = $status ? $status->status : $value['status'];
             array_push($orderslistr, $value);
         }
-
+        $data['total_amount'] = $total_amount;
+         
         $this->db->order_by('id', 'desc');
         $query = $this->db->get('admin_users');
-        $orderlist = $query->result_array();
-
+        $userlist = $query->result_array();
+        
+        
+        $this->db->order_by('id', 'desc');
+        $query = $this->db->get('vendor_order');
+        $vendororderlist = $query->result_array();
+        
+        
+        
+        $data['vendor_orders'] = count($vendororderlist); 
 
         $data['total_order'] = count($orderslistr);
+        
+        $data['total_users'] = count($userlist);
 
         $data['orderslist'] = $orderslistr;
 

@@ -26,9 +26,9 @@ $this->load->view('layout/layoutTop');
             <!-- small box -->
             <div class="small-box bg-green">
                 <div class="inner">
-                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                    <h3><?php echo $vendor_orders;?></h3>
 
-                    <p>Bounce Rate</p>
+                    <p>Vendor Orders</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
@@ -41,7 +41,7 @@ $this->load->view('layout/layoutTop');
             <!-- small box -->
             <div class="small-box bg-yellow">
                 <div class="inner">
-                    <h3>44</h3>
+                    <h3><?php echo $total_users;?></h3>
 
                     <p>User Registrations</p>
                 </div>
@@ -56,9 +56,9 @@ $this->load->view('layout/layoutTop');
             <!-- small box -->
             <div class="small-box bg-red">
                 <div class="inner">
-                    <h3>65</h3>
+                    <h3><?php echo $total_amount;?></h3>
 
-                    <p>Unique Visitors</p>
+                    <p>Order Amount</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-pie-graph"></i>
