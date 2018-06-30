@@ -203,11 +203,19 @@
 </div>
 <!-- ./wrapper -->
 
+
+
 <!-- jQuery 3 -->
 <script src="<?php echo base_url(); ?>assets_main/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="<?php echo base_url(); ?>assets_main/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- FastClick -->
+
+<!--morris js-->
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets_main/bower_components/morris.js/morris.css">
+<script src="<?php echo base_url(); ?>assets_main/bower_components/morris.js/raphael.min.js"></script>
+<script src="<?php echo base_url(); ?>assets_main/bower_components/morris.js/morris.min.js"></script>
+
 
 <script src="<?php echo base_url(); ?>assets_main/dist/js/adminlte.min.js"></script>
 
@@ -227,6 +235,12 @@
 <script src="<?php echo base_url(); ?>assets_main/treejs/jstree.min.js"></script>
 <!--end of tree js-->
 
+
+<!--datepicker-->
+<script src="<?php echo base_url(); ?>assets_main/plugins/datepicker/moment.min.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets_main/plugins/datepicker/daterangepicker.css">
+<script src="<?php echo base_url(); ?>assets_main/plugins/datepicker/daterangepicker.js"></script>
+<!--end of datepicker-->
 
 </body>
 </html>

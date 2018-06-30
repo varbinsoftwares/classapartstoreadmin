@@ -20,6 +20,29 @@ class Order extends CI_Controller {
         $this->user_type = $this->session->logged_in['user_type'];
     }
 
+    //list of data according to date list
+    public function date_graph_data($date1, $date2, $datalist) {
+        $period = new DatePeriod(
+                new DateTime($date1), new DateInterval('P1D'), new DateTime($date2)
+        );
+        $daterangearray = [$date1];
+        foreach ($period as $key => $value) {
+            array_push($daterangearray, $value->format('Y-m-d'));
+        }
+        array_push($daterangearray, $date2);
+
+        $date_list_data = array();
+
+        foreach ($daterangearray as $key => $value) {
+            if (isset($datalist[$value])) {
+                $date_list_data[$value] = $datalist[$value];
+            } else {
+                $date_list_data[$value] = 0;
+            }
+        }
+        return $date_list_data;
+    }
+
     public function index() {
         redirect('/');
     }
@@ -74,8 +97,20 @@ class Order extends CI_Controller {
 
     //order list accroding to user type
     public function orderslist() {
+        $data['exportdata'] = 'yes';
+        $date1 = date('Y-m-') . "01";
+        $date2 = date('Y-m-d');
+        if (isset($_GET['daterange'])) {
+            $daterange = $this->input->get('daterange');
+            $datelist = explode(" to ", $daterange);
+            $date1 = $datelist[0];
+            $date2 = $datelist[1];
+        }
+        $daterange = $date1 . " to " . $date2;
+        $data['daterange'] = $daterange;
         if ($this->user_type == 'Admin') {
             $this->db->order_by('id', 'desc');
+            $this->db->where('order_date between "' . $date1 . '" and "' . $date2 . '"');
             $query = $this->db->get('user_order');
             $orderlist = $query->result();
             $orderslistr = [];
@@ -97,6 +132,8 @@ class Order extends CI_Controller {
                     . 'o.state, vo.vendor_order_no, vo.total_price, vo.total_quantity, vo.c_date, vo.c_time');
             $this->db->join('user_order as o', 'o.id = vo.order_id', 'left');
             $this->db->where('vo.vendor_id', $this->user_id);
+            $this->db->where('c_date between "' . $date1 . '" and "' . $date2 . '"');
+
             $this->db->from('vendor_order as vo');
             $query = $this->db->get();
             $orderlist = $query->result();
@@ -115,6 +152,100 @@ class Order extends CI_Controller {
         }
     }
 
+    //order list accroding to user type
+    public function orderslistvendor() {
+        $data['exportdata'] = 'yes';
+        $date1 = date('Y-m-') . "01";
+        $date2 = date('Y-m-d');
+        if (isset($_GET['daterange'])) {
+            $daterange = $this->input->get('daterange');
+            $datelist = explode(" to ", $daterange);
+            $date1 = $datelist[0];
+            $date2 = $datelist[1];
+        }
+        $daterange = $date1 . " to " . $date2;
+        $data['daterange'] = $daterange;
+        if ($this->user_type == 'Admin') {
+            $this->db->order_by('vo.id', 'desc');
+            $this->db->group_by('vo.id');
+            $this->db->select('o.order_no, vo.id, o.name, o.email, o.address, o.city, o.status,'
+                    . 'o.state, vo.vendor_order_no, vo.total_price, vo.total_quantity, vo.c_date, vo.c_time');
+            $this->db->join('user_order as o', 'o.id = vo.order_id', 'left');
+            $this->db->where('c_date between "' . $date1 . '" and "' . $date2 . '"');
+
+            $this->db->from('vendor_order as vo');
+            $query = $this->db->get();
+            $orderlist = $query->result();
+            $orderslistr = [];
+            foreach ($orderlist as $key => $value) {
+                $this->db->order_by('id', 'desc');
+                $this->db->where('vendor_order_id', $value->id);
+                $query = $this->db->get('vendor_order_status');
+                $status = $query->row();
+                $value->status = $status ? $status->status : $value->status;
+                array_push($orderslistr, $value);
+            }
+            $data['orderslist'] = $orderslistr;
+            $this->load->view('Order/vendororderslist', $data);
+        }
+    }
+
+    //order list xls 
+    public function orderslistxls($daterange) {
+        $datelist = explode(" to ", urldecode($daterange));
+        $date1 = $datelist[0];
+        $date2 = $datelist[1];
+        $daterange = $date1 . " to " . $date2;
+        $data['daterange'] = $daterange;
+        if ($this->user_type == 'Admin') {
+            $this->db->order_by('id', 'desc');
+            $this->db->where('order_date between "' . $date1 . '" and "' . $date2 . '"');
+            $query = $this->db->get('user_order');
+            $orderlist = $query->result();
+            $orderslistr = [];
+            foreach ($orderlist as $key => $value) {
+                $this->db->order_by('id', 'desc');
+                $this->db->where('order_id', $value->id);
+                $query = $this->db->get('user_order_status');
+                $status = $query->row();
+                $value->status = $status ? $status->status : $value->status;
+                array_push($orderslistr, $value);
+            }
+            $data['orderslist'] = $orderslistr;
+            $html = $this->load->view('Order/orderslist_xls', $data, TRUE);
+        }
+        if ($this->user_type == 'Vendor') {
+            $this->db->order_by('vo.id', 'desc');
+            $this->db->group_by('vo.id');
+            $this->db->select('o.order_no, vo.id, o.name, o.email, o.address, o.city, o.contact_no, o.pincode,'
+                    . 'o.state, vo.vendor_order_no, vo.total_price, vo.total_quantity, vo.c_date, vo.c_time');
+            $this->db->join('user_order as o', 'o.id = vo.order_id', 'left');
+            $this->db->where('vo.vendor_id', $this->user_id);
+            $this->db->where('c_date between "' . $date1 . '" and "' . $date2 . '"');
+
+            $this->db->from('vendor_order as vo');
+            $query = $this->db->get();
+            $orderlist = $query->result();
+            $orderslistr = [];
+            foreach ($orderlist as $key => $value) {
+
+                $this->db->order_by('id', 'desc');
+                $this->db->where('vendor_order_id', $value->id);
+                $query = $this->db->get('vendor_order_status');
+                $status = $query->row();
+                $value->status = $status ? $status->status : $value->status;
+                array_push($orderslistr, $value);
+            }
+            $data['orderslist'] = $orderslistr;
+            $html = $this->load->view('Order/vendororderslist_xls', $data, TRUE);
+        }
+        $filename = 'orders_report_' . $daterange . ".xls";
+        ob_clean();
+        //header("Content-Disposition: attachment; filename='$filename'");
+        //header("Content-Type: application/vnd.ms-excel");
+        echo $html;
+    }
+
     //vendor order details
     public function vendor_order_details($order_id) {
         $this->db->where('id', $order_id);
@@ -130,7 +261,6 @@ class Order extends CI_Controller {
         if ($this->user_id != $vendor_order_details->vendor_id) {
             redirect('UserManager/not_granted');
         }
-
 
         $this->db->where('order_id', $order_details->id);
         $this->db->where('vendor_id', $this->user_id);
@@ -148,7 +278,6 @@ class Order extends CI_Controller {
             $orderstatuslist = $query->result();
 
             $data['cstatus'] = count($orderstatuslist) > 0 ? $orderstatuslist[0]->status : '';
-
 
             $data['vendor_order_status'] = $orderstatuslist;
             if (isset($_POST['submit'])) {
@@ -187,63 +316,124 @@ class Order extends CI_Controller {
 
     //order analisys
     public function orderAnalysis() {
+        $data['exportdata'] = 'no';
         if ($this->user_type != 'Admin') {
             redirect('UserManager/not_granted');
         }
-
+        $date1 = date('Y-m-') . "01";
+        $date2 = date('Y-m-d');
+        if (isset($_GET['daterange'])) {
+            $daterange = $this->input->get('daterange');
+            $datelist = explode(" to ", $daterange);
+            $date1 = $datelist[0];
+            $date2 = $datelist[1];
+        }
+        $daterange = $date1 . " to " . $date2;
+        $data['daterange'] = $daterange;
         $this->db->order_by('id', 'desc');
+        $this->db->where('order_date between "' . $date1 . '" and "' . $date2 . '"');
         $query = $this->db->get('user_order');
         $orderlist = $query->result_array();
         $orderslistr = [];
-
         $total_amount = 0;
-        
-        
         foreach ($orderlist as $key => $value) {
             $this->db->order_by('id', 'desc');
             $this->db->where('order_id', $value['id']);
-            
             $total_amount += $value['total_price'];
-            
             $query = $this->db->get('user_order_status');
             $status = $query->row();
             $value['status'] = $status ? $status->status : $value['status'];
             array_push($orderslistr, $value);
         }
         $data['total_amount'] = $total_amount;
-         
         $this->db->order_by('id', 'desc');
         $query = $this->db->get('admin_users');
         $userlist = $query->result_array();
-        
-        
+
         $this->db->order_by('id', 'desc');
         $query = $this->db->get('vendor_order');
         $vendororderlist = $query->result_array();
-        
-        
-        
-        $data['vendor_orders'] = count($vendororderlist); 
 
+
+        $data['vendor_orders'] = count($vendororderlist);
         $data['total_order'] = count($orderslistr);
-        
         $data['total_users'] = count($userlist);
-
         $data['orderslist'] = $orderslistr;
-
         $this->load->library('JsonSorting', $orderslistr);
-
         $orderstatus = $this->jsonsorting->collect_data('status');
-
         $orderuser = $this->jsonsorting->collect_data('name');
-
         $orderdate = $this->jsonsorting->collect_data('order_date');
-
         $data['orderstatus'] = $orderstatus;
         $data['orderuser'] = $orderuser;
         $data['orderdate'] = $orderdate;
 
+
+
+
+        //order graph date
+        $dategraphdata = $this->date_graph_data($date1, $date2, $orderdate);
+        $data['order_date_graph'] = $dategraphdata;
+
+      
+        $amount_date = $this->jsonsorting->data_combination_quantity('total_price', 'order_date');
+
+        print_r($amount_date);
+
         $this->load->view('Order/orderanalysis', $data);
+    }
+
+    //order analisys
+    public function orderAnalysisVendor() {
+        $data['exportdata'] = 'no';
+        if ($this->user_type != 'Vendor') {
+            redirect('Order/orderAnalysis');
+        }
+        $user_id = $this->user_id;
+        $date1 = date('Y-m-') . "01";
+        $date2 = date('Y-m-d');
+        if (isset($_GET['daterange'])) {
+            $daterange = $this->input->get('daterange');
+            $datelist = explode(" to ", $daterange);
+            $date1 = $datelist[0];
+            $date2 = $datelist[1];
+        }
+        $daterange = $date1 . " to " . $date2;
+        $data['daterange'] = $daterange;
+        $this->db->order_by('id', 'desc');
+        $this->db->where("vendor_id", $user_id);
+        $this->db->where('c_date between "' . $date1 . '" and "' . $date2 . '"');
+        $query = $this->db->get('vendor_order');
+        $orderlist = $query->result_array();
+        $orderslistr = [];
+        $total_amount = 0;
+        foreach ($orderlist as $key => $value) {
+            $this->db->order_by('id', 'desc');
+            $this->db->where('order_id', $value['id']);
+
+            $total_amount += $value['total_price'];
+
+            $query = $this->db->get('user_order_status');
+            $status = $query->row();
+            $value['status'] = $status ? $status->status : $value['status'];
+            array_push($orderslistr, $value);
+        }
+        $data['total_amount'] = $total_amount;
+        $this->db->order_by('id', 'desc');
+        $query = $this->db->get('vendor_order');
+        $vendororderlist = $query->result_array();
+        $data['total_order'] = count($orderlist);
+        $data['orderslist'] = $orderslistr;
+        $this->load->library('JsonSorting', $orderslistr);
+        $orderstatus = $this->jsonsorting->collect_data('status');
+        $orderuser = ''; //$this->jsonsorting->collect_data('name');
+        $orderdate = $this->jsonsorting->collect_data('c_date');
+        $data['orderstatus'] = $orderstatus;
+        $data['orderuser'] = $orderuser;
+        $data['orderdate'] = $orderdate;
+
+
+
+        $this->load->view('Order/orderanalysisvendor', $data);
     }
 
 }

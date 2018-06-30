@@ -30,32 +30,43 @@ $session_data = $this->session->userdata('logged_in');
 
 
 
-           
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-list"></i>
-                        <span>Order Management</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <!--Admin Access-->
-                        <li>
-                            <a href="<?php echo site_url('Order/orderslist'); ?>">
-                                <i class="active fa fa-plus "></i> <span>Orders Report</span>
-                            </a>
-                        </li>   
-                        <li>
-                            <a href="<?php echo site_url('Order/addVendor') ?>">
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-list"></i>
+                    <span>Order Management</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <!--Admin Access-->
+                    <li>
+                        <a href="<?php echo site_url('Order/orderslist'); ?>">
+                            <i class="active fa fa-plus "></i> <span>Orders Report</span>
+                        </a>
+                    </li>   
+                    <li>
+                        <?php if ($session_data['user_type'] == 'Admin') { ?>
+                            <a href="<?php echo site_url('Order/orderAnalysis') ?>">
                                 <i class="active fa fa-plus "></i> <span>Order Analytics</span>
                             </a>
-                        </li>   
-                        <!--end of admin access-->
+                            <?php
+                        }
+                        ?>
+                        <?php if ($session_data['user_type'] == 'Vendor') { ?>
+                            <a href="<?php echo site_url('Order/orderAnalysisVendor') ?>">
+                                <i class="active fa fa-plus "></i> <span>Order Analytics</span>
+                            </a>
+                            <?php
+                        }
+                        ?>
+                    </li>   
+                    <!--end of admin access-->
 
-                    </ul>
-                </li>
-           
+                </ul>
+            </li>
+
 
 
 
@@ -135,7 +146,7 @@ $session_data = $this->session->userdata('logged_in');
                         <i class="active fa fa-money "></i> <span>Allot Credits</span>
                     </a>
                 </li>  
-                
+
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-cogs"></i>
@@ -151,16 +162,16 @@ $session_data = $this->session->userdata('logged_in');
                                 <i class="active fa fa-plus "></i> <span>Add Sliders</span>
                             </a>
                         </li>   
-<!--                        <li>
-                            <a href="<?php echo base_url(); ?>index.php/UserManager/usersReport">
-                                <i class="active fa fa-plus "></i> <span>Users Reports</span>
-                            </a>
-                        </li>   -->
+                        <!--                        <li>
+                                                    <a href="<?php echo base_url(); ?>index.php/UserManager/usersReport">
+                                                        <i class="active fa fa-plus "></i> <span>Users Reports</span>
+                                                    </a>
+                                                </li>   -->
                         <!--end of admin access-->
                     </ul>
                 </li>
 
-                
+
                 <?php
             }
             ?>

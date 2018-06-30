@@ -49,7 +49,7 @@ $this->load->view('layout/layoutTop');
                         <div class="col-md-9">
                             <div class="form-group">
                                 <label>Remark</label>
-                                <input type="text" class="form-control" placeholder="Enter Message" name="remark">
+                                <input type="text" class="form-control" placeholder="Enter Message" name="remark" required="">
                             </div>
                         </div>
 

@@ -22,6 +22,10 @@ $this->load->view('layout/layoutTop');
     .price_tag_final{
         width: 100%;
     }
+    
+    .exportdata{
+            margin: 15px 0px 0px 0px;
+    }
 </style>
 <!-- Main content -->
 
@@ -129,21 +133,33 @@ function userReportFunction($users) {
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="allusers">
+                        <a class="btn btn-success exportdata" href="<?php echo site_url('userManager/user_profile_record_xls/all');?>"  targer="_blank">
+                        Export Data
+                        </a>
                         <div class="" style="padding:20px">
                             <?php userReportFunction($users_all); ?>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="vendors">
+                        <a class="btn btn-success exportdata" href="<?php echo site_url('userManager/user_profile_record_xls/vendor');?>"  targer="_blank">
+                        Export Data
+                        </a>
                         <div class="" style="padding:20px">
                             <?php userReportFunction($users_vendor); ?>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="customers">
+                        <a class="btn btn-success exportdata" href="<?php echo site_url('userManager/user_profile_record_xls/customers');?>"  targer="_blank">
+                        Export Data
+                        </a>
                         <div class="" style="padding:20px">
                             <?php userReportFunction($users_customer); ?>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="blockedusers">
+                        <a class="btn btn-success exportdata" href="<?php echo site_url('userManager/user_profile_record_xls/blocked');?>" targer="_blank">
+                        Export Data
+                        </a>
                         <div class="" style="padding:20px">
                             <?php userReportFunction($users_blocked); ?>
                         </div>

@@ -33,10 +33,10 @@ class UserManager extends CI_Controller {
     }
 
     public function not_granted() {
-         $this->load->view('errors/html/error_404_c');
+        $this->load->view('errors/html/error_404_c');
     }
 
-    public function usersReport() {
+    public function usersReport() {        
         $data['users_vendor'] = $this->User_model->user_reports("Vendor");
         $data['users_customer'] = $this->User_model->user_reports("Customer");
         $data['users_all'] = $this->User_model->user_reports("All");
@@ -45,6 +45,20 @@ class UserManager extends CI_Controller {
             redirect('UserManager/not_granted');
         }
         $this->load->view('userManager/usersReport', $data);
+    }
+
+    public function user_profile_record_xls($user_type) {
+        $data['user_type'] = $user_type;
+        $data['users_vendor'] = $this->User_model->user_reports("Vendor");
+        $data['users_customer'] = $this->User_model->user_reports("Customer");
+        $data['users_all'] = $this->User_model->user_reports("All");
+        $data['users_blocked'] = $this->User_model->user_reports("Blocked");
+        $filename = 'customers_report_' . $user_type. "_" . date('Ymd') . ".xls";
+        $html = $this->load->view('userManager/userProfileRecordXls', $data, TRUE);
+        ob_clean();
+        header("Content-Disposition: attachment; filename='$filename'");
+        header("Content-Type: application/vnd.ms-excel");
+        echo $html;
     }
 
     public function addVendor() {
