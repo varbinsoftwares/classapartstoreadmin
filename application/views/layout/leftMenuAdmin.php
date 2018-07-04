@@ -1,6 +1,18 @@
 <!-- begin #sidebar -->
 <?php
 $session_data = $this->session->userdata('logged_in');
+
+function checkPermission() {
+    if ($session_data['user_type'] == 'Admin') {
+        return "system";
+    }
+    if ($session_data['user_type'] == 'Manager') {
+        return "system";
+    }
+    if ($session_data['user_type'] == 'Vendor') {
+        return "vendor";
+    }
+}
 ?>
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -47,14 +59,14 @@ $session_data = $this->session->userdata('logged_in');
                         </a>
                     </li>   
                     <li>
-                        <?php if ($session_data['user_type'] == 'Admin') { ?>
+                        <?php if (checkPermission() == 'system') { ?>
                             <a href="<?php echo site_url('Order/orderAnalysis') ?>">
                                 <i class="active fa fa-plus "></i> <span>Order Analytics</span>
                             </a>
                             <?php
                         }
                         ?>
-                        <?php if ($session_data['user_type'] == 'Vendor') { ?>
+                        <?php if (checkPermission()  == 'vendor') { ?>
                             <a href="<?php echo site_url('Order/orderAnalysisVendor') ?>">
                                 <i class="active fa fa-plus "></i> <span>Order Analytics</span>
                             </a>
@@ -92,7 +104,7 @@ $session_data = $this->session->userdata('logged_in');
                     </li>    
 
 
-                    <?php if ($session_data['user_type'] == 'Admin') { ?>
+                    <?php if (checkPermission() == 'system') { ?>
                         <!--Admin Access-->
                         <li>
                             <a href="<?php echo base_url(); ?>index.php/ProductManager/categories">
@@ -114,7 +126,7 @@ $session_data = $this->session->userdata('logged_in');
 
 
 
-            <?php if ($session_data['user_type'] == 'Admin') { ?>
+            <?php if (checkPermission()  == 'system') { ?>
 
 
                 <li class="treeview">
@@ -158,7 +170,7 @@ $session_data = $this->session->userdata('logged_in');
                     <ul class="treeview-menu">
                         <!--Admin Access-->
                         <li>
-                            <a href="<?php echo base_url(); ?>index.php/ProductManager/add_sliders">
+                            <a href="<?php echo base_url(); ?>index.php/Configuration/add_sliders">
                                 <i class="active fa fa-plus "></i> <span>Add Sliders</span>
                             </a>
                         </li>   
