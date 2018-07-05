@@ -346,11 +346,16 @@ class Order extends CI_Controller {
             array_push($orderslistr, $value);
         }
         $data['total_amount'] = $total_amount;
+        
+        
+        
         $this->db->order_by('id', 'desc');
+        $this->db->where('op_date_time between "' . $date1 . '" and "' . $date2 . '"');
         $query = $this->db->get('admin_users');
         $userlist = $query->result_array();
 
         $this->db->order_by('id', 'desc');
+        $this->db->where('c_date between "' . $date1 . '" and "' . $date2 . '"');
         $query = $this->db->get('vendor_order');
         $vendororderlist = $query->result_array();
 
@@ -376,8 +381,17 @@ class Order extends CI_Controller {
 
       
         $amount_date = $this->jsonsorting->data_combination_quantity('total_price', 'order_date');
+        
+        $salesgraph = array();
+        
+        foreach ($dategraphdata as $key => $value) {
+            $salesgraph[$key] = 0;
+            if(isset($amount_date[$key])){
+                $salesgraph[$key] = $amount_date[$key];
+            }
+        }
 
-        print_r($amount_date);
+        $data['salesgraph'] = $salesgraph;
 
         $this->load->view('Order/orderanalysis', $data);
     }

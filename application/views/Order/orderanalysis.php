@@ -113,7 +113,7 @@ $this->load->view('layout/layoutTop');
                     </div>
                 </div>
                 <div class="box-body border-radius-none">
-                    <div class="chart" id="line-chart" style="height: 250px;"></div>
+                    <div class="chart" id="line-chart" style="height: 300px;"></div>
                 </div>
             </div>
             <!-- /.box -->
@@ -132,105 +132,102 @@ $this->load->view('layout/layoutFooter');
 <script>
     $(function () {
 
-        $('#tableData').DataTable({
+    $('#tableData').DataTable({
 //      'paging'      : true,
 //      'lengthChange': false,
 //      'searching'   : false,
 //      'ordering'    : true,
 //      'info'        : true,
 //      'autoWidth'   : false
-        })
+    })
     })
 
 
-    $(function () {
-        $("#daterangepicker").daterangepicker({
+            $(function () {
+            $("#daterangepicker").daterangepicker({
             format: 'YYYY-MM-DD',
-            showDropdowns: true,
-            showWeekNumbers: true,
-            timePicker: false,
-            timePickerIncrement: 1,
-            timePicker12Hour: true,
-            ranges: {
-                "Today's": [moment(), moment()],
-                "Yesterday's": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            },
-            opens: 'right',
-            drops: 'down',
-            buttonClasses: ['btn', 'btn-sm'],
-            applyClass: 'btn-primary',
-            cancelClass: 'btn-default',
-            separator: ' to ',
-            locale: {
-                applyLabel: 'Submit',
-                cancelLabel: 'Cancel',
-                fromLabel: 'From',
-                toLabel: 'To',
-                customRangeLabel: 'Custom',
-                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                firstDay: 1
-            }
-        }, function (start, end, label) {
+                    showDropdowns: true,
+                    showWeekNumbers: true,
+                    timePicker: false,
+                    timePickerIncrement: 1,
+                    timePicker12Hour: true,
+                    ranges: {
+                    "Today's": [moment(), moment()],
+                            "Yesterday's": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                            'This Month': [moment().startOf('month'), moment().endOf('month')],
+                            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    opens: 'right',
+                    drops: 'down',
+                    buttonClasses: ['btn', 'btn-sm'],
+                    applyClass: 'btn-primary',
+                    cancelClass: 'btn-default',
+                    separator: ' to ',
+                    locale: {
+                    applyLabel: 'Submit',
+                            cancelLabel: 'Cancel',
+                            fromLabel: 'From',
+                            toLabel: 'To',
+                            customRangeLabel: 'Custom',
+                            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                            firstDay: 1
+                    }
+            }, function (start, end, label) {
             $('input[name=daterange]').val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-        });
-        $(".data_table").DataTable();
-    })
+            });
+                    $(".data_table").DataTable();
+            })
 
 
-    // Sales chart
-    var area = new Morris.Area({
-        element: 'revenue-chart',
-        resize: true,
-        data: [
+            // Sales chart
+            var area = new Morris.Area({
+            element: 'revenue-chart',
+                    resize: true,
+                    data: [
 <?php
 foreach ($order_date_graph as $key => $value) {
     ?>
-                {y: '<?php echo $key; ?>', orders: <?php echo $value; ?>},
+                        {y: '<?php echo $key; ?>', orders: <?php echo $value; ?>},
     <?php
 }
 ?>
-        ],
-        xkey: 'y',
-        ykeys: ['orders'],
-        labels: ['Total Orders'],
-        lineColors: ['#a0d0e0', '#3c8dbc'],
-        hideHover: 'auto'
-    });
+                    ],
+                    xkey: 'y',
+                    ykeys: ['orders'],
+                    labels: ['Total Orders'],
+                    lineColors: ['#a0d0e0', '#3c8dbc'],
+                    hideHover: 'auto'
+            });
+            var line = new Morris.Line({
+            element: 'line-chart',
+                    resize: true,
+                    data: [
+<?php
+foreach ($salesgraph as $key => $value) {
+    ?>
 
+                        {y: '<?php echo $key; ?> <?php echo $value; ?>', item1: <?php echo $value; ?>},
+    <?php
+}
+?>
 
-    var line = new Morris.Line({
-        element: 'line-chart',
-        resize: true,
-        data: [
-            {y: '2011 Q1', item1: 2666},
-            {y: '2011 Q2', item1: 2778},
-            {y: '2011 Q3', item1: 4912},
-            {y: '2011 Q4', item1: 3767},
-            {y: '2012 Q1', item1: 6810},
-            {y: '2012 Q2', item1: 5670},
-            {y: '2012 Q3', item1: 4820},
-            {y: '2012 Q4', item1: 15073},
-            {y: '2013 Q1', item1: 10687},
-            {y: '2013 Q2', item1: 8432}
-        ],
-        xkey: 'y',
-        ykeys: ['item1'],
-        labels: ['Item 1'],
-        lineColors: ['#efefef'],
-        lineWidth: 2,
-        hideHover: 'auto',
-        gridTextColor: '#fff',
-        gridStrokeWidth: 0.4,
-        pointSize: 4,
-        pointStrokeColors: ['#efefef'],
-        gridLineColor: '#efefef',
-        gridTextFamily: 'Open Sans',
-        gridTextSize: 10
-    });
+                    ],
+                    xkey: 'y',
+                    ykeys: ['item1'],
+                    labels: ['Orders'],
+                    lineColors: ['#efefef'],
+                    lineWidth: 2,
+                    hideHover: 'auto',
+                    gridTextColor: '#fff',
+                    gridStrokeWidth: 0.4,
+                    pointSize: 4,
+                    pointStrokeColors: ['#efefef'],
+                    gridLineColor: '#efefef',
+                    gridTextFamily: 'Open Sans',
+                    gridTextSize: 10
+            });
 
 </script>

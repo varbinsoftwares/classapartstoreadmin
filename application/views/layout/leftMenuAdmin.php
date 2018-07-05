@@ -2,7 +2,7 @@
 <?php
 $session_data = $this->session->userdata('logged_in');
 
-function checkPermission() {
+function checkPermission($session_data) {
     if ($session_data['user_type'] == 'Admin') {
         return "system";
     }
@@ -59,14 +59,14 @@ function checkPermission() {
                         </a>
                     </li>   
                     <li>
-                        <?php if (checkPermission() == 'system') { ?>
+                        <?php if (checkPermission($session_data) == 'system') { ?>
                             <a href="<?php echo site_url('Order/orderAnalysis') ?>">
                                 <i class="active fa fa-plus "></i> <span>Order Analytics</span>
                             </a>
                             <?php
                         }
                         ?>
-                        <?php if (checkPermission()  == 'vendor') { ?>
+                        <?php if (checkPermission($session_data)  == 'vendor') { ?>
                             <a href="<?php echo site_url('Order/orderAnalysisVendor') ?>">
                                 <i class="active fa fa-plus "></i> <span>Order Analytics</span>
                             </a>
@@ -104,7 +104,7 @@ function checkPermission() {
                     </li>    
 
 
-                    <?php if (checkPermission() == 'system') { ?>
+                    <?php if (checkPermission($session_data) == 'system') { ?>
                         <!--Admin Access-->
                         <li>
                             <a href="<?php echo base_url(); ?>index.php/ProductManager/categories">
@@ -126,7 +126,7 @@ function checkPermission() {
 
 
 
-            <?php if (checkPermission()  == 'system') { ?>
+            <?php if (checkPermission($session_data)  == 'system') { ?>
 
 
                 <li class="treeview">
