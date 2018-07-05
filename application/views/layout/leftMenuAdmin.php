@@ -58,22 +58,32 @@ function checkPermission($session_data) {
                             <i class="active fa fa-plus "></i> <span>Orders Report</span>
                         </a>
                     </li>   
-                    <li>
-                        <?php if (checkPermission($session_data) == 'system') { ?>
+
+                    <?php if (checkPermission($session_data) == 'system') { ?>
+                        <li>
+                            <a href="<?php echo site_url('Order/orderslistvendor'); ?>">
+                                <i class="active fa fa-plus "></i> <span>Vendor Orders Report</span>
+                            </a>
+                        </li>  
+
+                        <li>       
                             <a href="<?php echo site_url('Order/orderAnalysis') ?>">
                                 <i class="active fa fa-plus "></i> <span>Order Analytics</span>
                             </a>
-                            <?php
-                        }
-                        ?>
-                        <?php if (checkPermission($session_data)  == 'vendor') { ?>
+                        </li>
+                        <?php
+                    }
+                    ?>
+                    <?php if (checkPermission($session_data) == 'vendor') { ?>
+                        <li>      
                             <a href="<?php echo site_url('Order/orderAnalysisVendor') ?>">
                                 <i class="active fa fa-plus "></i> <span>Order Analytics</span>
-                            </a>
-                            <?php
-                        }
-                        ?>
-                    </li>   
+                            </a> 
+                        </li> 
+                        <?php
+                    }
+                    ?>
+
                     <!--end of admin access-->
 
                 </ul>
@@ -126,7 +136,7 @@ function checkPermission($session_data) {
 
 
 
-            <?php if (checkPermission($session_data)  == 'system') { ?>
+            <?php if (checkPermission($session_data) == 'system') { ?>
 
 
                 <li class="treeview">

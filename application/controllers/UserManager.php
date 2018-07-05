@@ -36,11 +36,12 @@ class UserManager extends CI_Controller {
         $this->load->view('errors/html/error_404_c');
     }
 
-    public function usersReport() {        
+    public function usersReport() {
         $data['users_vendor'] = $this->User_model->user_reports("Vendor");
         $data['users_customer'] = $this->User_model->user_reports("Customer");
         $data['users_all'] = $this->User_model->user_reports("All");
         $data['users_blocked'] = $this->User_model->user_reports("Blocked");
+        $data['users_manager'] = $this->User_model->user_reports("Manager");
         if ($this->user_type != 'Admin') {
             redirect('UserManager/not_granted');
         }
@@ -53,7 +54,8 @@ class UserManager extends CI_Controller {
         $data['users_customer'] = $this->User_model->user_reports("Customer");
         $data['users_all'] = $this->User_model->user_reports("All");
         $data['users_blocked'] = $this->User_model->user_reports("Blocked");
-        $filename = 'customers_report_' . $user_type. "_" . date('Ymd') . ".xls";
+        $data['users_manager'] = $this->User_model->user_reports("Manager");
+        $filename = 'customers_report_' . $user_type . "_" . date('Ymd') . ".xls";
         $html = $this->load->view('userManager/userProfileRecordXls', $data, TRUE);
         ob_clean();
         header("Content-Disposition: attachment; filename='$filename'");
@@ -64,6 +66,7 @@ class UserManager extends CI_Controller {
     public function addVendor() {
         $config['upload_path'] = 'assets_main/userimages';
         $config['allowed_types'] = '*';
+        $data["message"] = "";
         if (isset($_POST['submit'])) {
             $picture = '';
             if (!empty($_FILES['picture']['name'])) {
@@ -83,24 +86,43 @@ class UserManager extends CI_Controller {
                     $picture = '';
                 }
             }
-            $op_date_time = date('Y-m-d H:i:s');
-            $user_type = 'Vendor';
-            $password = $this->input->post('password');
-            $pwd = md5($password);
-            $first_name = $this->input->post('first_name');
-            $last_name = $this->input->post('last_name');
+
             $email = $this->input->post('email');
-            $contact_no = $this->input->post('contact_no');
-            $address = $this->input->post('address');
-            $post_data = array('first_name' => $first_name,
-                'last_name' => $last_name, 'email ' => $email,
-                'user_type' => $user_type, 'password2' => $password, 'image' => $picture,
-                'password' => $pwd, 'address' => $address, 'contact_no' => $contact_no,
-                'op_date_time' => $op_date_time);
-            $this->db->insert('admin_users', $post_data);
-            redirect('UserManager/addVendor');
+
+
+            $this->db->where('email', $email);
+            $query = $this->db->get('admin_users');
+            $user_details = $query->row();
+
+            if ($user_details) {
+                $data["message"] = "Email already exist.";
+            } else {
+                $op_date_time = date('Y-m-d H:i:s');
+                $user_type = $this->input->post('user_type');
+                $password = $this->input->post('password');
+                $pwd = md5($password);
+                $first_name = $this->input->post('first_name');
+                $last_name = $this->input->post('last_name');
+
+                $contact_no = $this->input->post('contact_no');
+                $address = $this->input->post('address');
+                $post_data = array(
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'email ' => $email,
+                    'user_type' => $user_type,
+                    'password2' => $password,
+                    'image' => $picture,
+                    'password' => $pwd,
+                    'address' => $address,
+                    'contact_no' => $contact_no,
+                    'op_date_time' => $op_date_time
+                );
+                $this->db->insert('admin_users', $post_data);
+                redirect('UserManager/addVendor');
+            }
         }
-        $this->load->view('userManager/addVendor');
+        $this->load->view('userManager/addVendor', $data);
     }
 
     public function profile_update_info($user_id = 0) {

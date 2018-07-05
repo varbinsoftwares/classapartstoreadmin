@@ -19,10 +19,25 @@ $this->load->view('layout/layoutTop');
 
         <div class="box box-danger">
             <div class="box-header">
-                <h3 class="box-title">Add Vendor</h3>
+                <h3 class="box-title">Add Vendor / Manager </h3>
             </div>
             <div class="box-body">
                 <form action="#" method="post" enctype="multipart/form-data">
+
+                    
+
+                   <?php
+                   if($message){
+                   ?>
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                        <?php echo $message;?>
+                    </div>
+                    <?php 
+                   }
+                    ?>
+
 
                     <div class="row">
 
@@ -40,6 +55,15 @@ $this->load->view('layout/layoutTop');
                         </div>
                         <div class="col-md-8">
                             <div class="col-md-12">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label >User Type</label>
+                                        <select name="user_type" class="form-control">
+                                            <option>Vendor</option>
+                                            <option>Manager</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label >First Name</label>

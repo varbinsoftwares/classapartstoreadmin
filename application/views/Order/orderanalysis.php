@@ -29,7 +29,7 @@ $this->load->view('layout/layoutTop');
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="<?php echo site_url('Order/orderslist?daterange='.$daterange.'&submit=searchdata');?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -44,7 +44,7 @@ $this->load->view('layout/layoutTop');
                         <div class="icon">
                             <i class="ion ion-stats-bars"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="<?php echo site_url('Order/orderslistvendor?daterange='.$daterange.'&submit=searchdata');?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -59,7 +59,7 @@ $this->load->view('layout/layoutTop');
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="<?php echo site_url('UserManager/usersReport');?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -209,7 +209,7 @@ foreach ($order_date_graph as $key => $value) {
 foreach ($salesgraph as $key => $value) {
     ?>
 
-                        {y: '<?php echo $key; ?> <?php echo $value; ?>', item1: <?php echo $value; ?>},
+                        {y: '<?php echo $key; ?>', item1: <?php echo $value; ?>},
     <?php
 }
 ?>

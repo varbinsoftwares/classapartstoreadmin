@@ -215,12 +215,7 @@ $this->load->view('layout/layoutTop');
                                             echo $vendor->vendor_order_no;
                                             ?>
                                         </b>
-                                        <br/>
-                                        Total Price : <b>
-                                            {{<?php
-                                            echo $vendor->total_price;
-                                            ?>|currency:' '}}
-                                        </b>
+                                       
                                     </p>
                                     <a class="btn btn-primary btn-xs" href="<?php echo site_url('Order/vendor_order_details/'.$vendor->id);?>">Process As Vendor</a>
                                 </td>
@@ -228,6 +223,8 @@ $this->load->view('layout/layoutTop');
                             </tr>
 
                             <?php
+                            $vendor_total_price = 0;
+                            $vendor_total_quntity = 0;
                             foreach ($voc['cart_items'] as $key => $product) {
                                 ?>
                                 <tr>
@@ -256,6 +253,8 @@ $this->load->view('layout/layoutTop');
                                     </td>
                                 </tr>
                                 <?php
+                                $vendor_total_price += $product->total_price;
+                                $vendor_total_quntity += $product->quantity;
                             }
                             ?>
                             <tr style="font-weight: bold;background: #fff;">
@@ -263,11 +262,11 @@ $this->load->view('layout/layoutTop');
                                     Total
                                 </td>
                                 <td style="text-align: right;">
-                                    {{<?php echo $vendor->total_quantity; ?>}}
+                                    {{<?php echo $vendor_total_quntity; ?>}}
                                 </td>
 
                                 <td style="text-align: right;">
-                                    {{<?php echo $vendor->total_price; ?>|currency:' '}}
+                                    {{<?php echo $vendor_total_price; ?>|currency:' '}}
                                 </td>
                             </tr>
                             <?php
