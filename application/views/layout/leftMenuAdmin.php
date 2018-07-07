@@ -183,7 +183,12 @@ function checkPermission($session_data) {
                             <a href="<?php echo base_url(); ?>index.php/Configuration/add_sliders">
                                 <i class="active fa fa-plus "></i> <span>Add Sliders</span>
                             </a>
-                        </li>   
+                        </li> 
+                        <li>
+                            <a href="<?php echo base_url(); ?>index.php/Configuration/add_barcode">
+                                <i class="active fa fa-plus "></i> <span>Add Barcodes</span>
+                            </a>
+                        </li> 
                         <!--                        <li>
                                                     <a href="<?php echo base_url(); ?>index.php/UserManager/usersReport">
                                                         <i class="active fa fa-plus "></i> <span>Users Reports</span>
