@@ -526,7 +526,7 @@ class ProductManager extends CI_Controller {
         $data['sliders'] = $query->result();
         if (isset($_POST['submit'])) {
             if (!empty($_FILES['picture']['name'])) {
-                $config['upload_path'] = 'assets_main/sliderimages';
+                $config['upload_path'] = 'assets/paymentstatus';
                 $config['allowed_types'] = '*';
                 $temp1 = rand(100, 1000000);
                 $ext1 = explode('.', $_FILES['picture']['name']);
@@ -554,7 +554,7 @@ class ProductManager extends CI_Controller {
                 'link_text' => $this->input->post('link_text'),
                 'file_name' => $file_newname);
 
-            print_r($post_data);
+           
             $this->db->insert('sliders', $post_data);
             $last_id = $this->db->insert_id();
             redirect('ProductManager/add_sliders');

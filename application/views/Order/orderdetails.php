@@ -37,6 +37,7 @@ $this->load->view('layout/layoutTop');
                                 <label>Order Status</label>
                                 <select class="form-control" name="status">
                                     <option>Pending</option>
+                                    <option>Payment Confirmed</option>
                                     <option>Shipped</option>
                                     <option>Delivered</option>
                                     <option>Complete</option>
