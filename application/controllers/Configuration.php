@@ -94,10 +94,11 @@ class Configuration extends CI_Controller {
                 $user_id = $this->session->userdata('logged_in')['login_id'];
 
                 $this->db->set('title', $this->input->post('title'));
-                'title_color' => $this->input->post('title_color'),
-                'line1_color' => $this->input->post('line1_color'),
-                'line2_color' => $this->input->post('line2_color'),
+               
                 $this->db->set('line1', $this->input->post('line1'));
+                $this->db->set('title_color', $this->input->post('title_color'));
+                $this->db->set('line1_color', $this->input->post('line1_color'));
+                $this->db->set('line2_color', $this->input->post('line2_color'));
                 $this->db->set('line2', $this->input->post('line2'));
                 $this->db->set('link', $this->input->post('link'));
                 $this->db->set('link_text', $this->input->post('link_text'));
