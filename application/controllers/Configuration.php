@@ -88,6 +88,7 @@ class Configuration extends CI_Controller {
                     } else {
                         $picture = '';
                     }
+                    $this->db->set('file_name', $file_newname);
                 } else {
                     $picture = '';
                 }
@@ -104,7 +105,7 @@ class Configuration extends CI_Controller {
                 $this->db->set('link_text', $this->input->post('link_text'));
                 $this->db->set('position', $this->input->post('position'));
 
-                $this->db->set('file_name', $file_newname);
+                
 
                 $this->db->where('id', $this->input->post('slider_id')); //set column_name and value in which row need to update
                 $this->db->update('sliders');
