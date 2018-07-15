@@ -94,6 +94,9 @@ class Configuration extends CI_Controller {
                 $user_id = $this->session->userdata('logged_in')['login_id'];
 
                 $this->db->set('title', $this->input->post('title'));
+                'title_color' => $this->input->post('title_color'),
+                'line1_color' => $this->input->post('line1_color'),
+                'line2_color' => $this->input->post('line2_color'),
                 $this->db->set('line1', $this->input->post('line1'));
                 $this->db->set('line2', $this->input->post('line2'));
                 $this->db->set('link', $this->input->post('link'));
@@ -132,6 +135,9 @@ class Configuration extends CI_Controller {
                 $user_id = $this->session->userdata('logged_in')['login_id'];
                 $post_data = array(
                     'title' => $this->input->post('title'),
+                    'title_color' => $this->input->post('title_color'),
+                    'line1_color' => $this->input->post('line1_color'),
+                    'line2_color' => $this->input->post('line2_color'),
                     'line1' => $this->input->post('line1'),
                     'line2' => $this->input->post('line2'),
                     'link' => $this->input->post('link'),
@@ -158,13 +164,13 @@ class Configuration extends CI_Controller {
         redirect('Configuration/add_barcode');
     }
 
-     //delete barcode data
-    function delete_barcode($barcode_id){
+    //delete barcode data
+    function delete_barcode($barcode_id) {
         $this->db->where('id', $barcode_id); //set column_name and value in which row need to update
         $this->db->delete('payment_barcode');
         redirect('Configuration/add_barcode');
     }
-    
+
     //Add product function
     function add_barcode($slider_id = 0) {
         $query = $this->db->get('payment_barcode');
