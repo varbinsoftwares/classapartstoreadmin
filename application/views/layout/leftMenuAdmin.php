@@ -1,7 +1,6 @@
 <!-- begin #sidebar -->
 <?php
 $session_data = $this->session->userdata('logged_in');
-
 function checkPermission($session_data) {
     if ($session_data['user_type'] == 'Admin') {
         return "system";
