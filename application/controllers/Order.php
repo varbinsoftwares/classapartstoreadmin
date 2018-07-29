@@ -49,7 +49,7 @@ class Order extends CI_Controller {
 
     //order details
     public function orderdetails($order_key) {
-        if ($this->user_type != 'Admin') {
+        if ($this->user_type == 'Vendor' || $this->user_type == 'Customer') {
             redirect('UserManager/not_granted');
         }
         $order_details = $this->Order_model->getOrderDetails($order_key, 'key');
@@ -108,7 +108,7 @@ class Order extends CI_Controller {
         }
         $daterange = $date1 . " to " . $date2;
         $data['daterange'] = $daterange;
-        if ($this->user_type == 'Admin') {
+        if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
             $this->db->order_by('id', 'desc');
             $this->db->where('order_date between "' . $date1 . '" and "' . $date2 . '"');
             $query = $this->db->get('user_order');
@@ -165,7 +165,7 @@ class Order extends CI_Controller {
         }
         $daterange = $date1 . " to " . $date2;
         $data['daterange'] = $daterange;
-        if ($this->user_type == 'Admin') {
+        if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
             $this->db->order_by('vo.id', 'desc');
             $this->db->group_by('vo.id');
             $this->db->select('o.order_no, vo.id, o.name, o.email, o.address, o.city, o.status,'
@@ -197,7 +197,7 @@ class Order extends CI_Controller {
         $date2 = $datelist[1];
         $daterange = $date1 . " to " . $date2;
         $data['daterange'] = $daterange;
-        if ($this->user_type == 'Admin') {
+        if ($this->user_type == 'Admin' || $this->user_type == 'Manager') {
             $this->db->order_by('id', 'desc');
             $this->db->where('order_date between "' . $date1 . '" and "' . $date2 . '"');
             $query = $this->db->get('user_order');
@@ -257,10 +257,10 @@ class Order extends CI_Controller {
         $query = $this->db->get('user_order');
         $order_details = $query->row();
         $data['order_details'] = $order_details;
-
-        if ($this->user_id != $vendor_order_details->vendor_id) {
-            redirect('UserManager/not_granted');
-        }
+//
+//        if ($this->user_id != $vendor_order_details->vendor_id) {
+//            redirect('UserManager/not_granted');
+//        }
 
         $this->db->where('order_id', $order_details->id);
         $this->db->where('vendor_id', $this->user_id);
@@ -317,7 +317,7 @@ class Order extends CI_Controller {
     //order analisys
     public function orderAnalysis() {
         $data['exportdata'] = 'no';
-        if ($this->user_type != 'Admin') {
+        if ($this->user_type == 'Vendor' || $this->user_type == 'Customer') {
             redirect('UserManager/not_granted');
         }
         $date1 = date('Y-m-') . "01";
@@ -346,9 +346,9 @@ class Order extends CI_Controller {
             array_push($orderslistr, $value);
         }
         $data['total_amount'] = $total_amount;
-        
-        
-        
+
+
+
         $this->db->order_by('id', 'desc');
         $this->db->where('op_date_time between "' . $date1 . '" and "' . $date2 . '"');
         $query = $this->db->get('admin_users');
@@ -379,14 +379,14 @@ class Order extends CI_Controller {
         $dategraphdata = $this->date_graph_data($date1, $date2, $orderdate);
         $data['order_date_graph'] = $dategraphdata;
 
-      
+
         $amount_date = $this->jsonsorting->data_combination_quantity('total_price', 'order_date');
-        
+
         $salesgraph = array();
-        
+
         foreach ($dategraphdata as $key => $value) {
             $salesgraph[$key] = 0;
-            if(isset($amount_date[$key])){
+            if (isset($amount_date[$key])) {
                 $salesgraph[$key] = $amount_date[$key];
             }
         }

@@ -60,7 +60,9 @@ $this->load->view('layout/layoutTop');
                                         <label >User Type</label>
                                         <select name="user_type" class="form-control">
                                             <option>Vendor</option>
+                                             <?php if($user_type=='Admin'){;?><
                                             <option>Manager</option>
+                                             <?php }?>
                                         </select>
                                     </div>
                                 </div>

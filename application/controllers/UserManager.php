@@ -42,9 +42,10 @@ class UserManager extends CI_Controller {
         $data['users_all'] = $this->User_model->user_reports("All");
         $data['users_blocked'] = $this->User_model->user_reports("Blocked");
         $data['users_manager'] = $this->User_model->user_reports("Manager");
-        if ($this->user_type != 'Admin') {
+        if ($this->user_type == 'Vendor' || $this->user_type == 'Customer') {
             redirect('UserManager/not_granted');
         }
+
         $this->load->view('userManager/usersReport', $data);
     }
 
@@ -67,6 +68,7 @@ class UserManager extends CI_Controller {
         $config['upload_path'] = 'assets_main/userimages';
         $config['allowed_types'] = '*';
         $data["message"] = "";
+        $data['user_type'] = $this->user_type ;
         if (isset($_POST['submit'])) {
             $picture = '';
             if (!empty($_FILES['picture']['name'])) {
@@ -338,6 +340,23 @@ class UserManager extends CI_Controller {
             redirect('UserManager/usersCreditDebit#' . $this->input->post('user_id'));
         }
         $this->load->view('userManager/usersCreditDebit');
+    }
+
+    public function adminCreditDebit() {
+        $op_date = date('Y-m-d');
+        $op_time = date('H:i:s');
+        if (isset($_POST['allot_credit'])) {
+            $credit_data = array(
+                'c_date' => $op_date,
+                'c_time' => $op_time,
+                'credit' => $this->input->post('credit'),
+                'user_id' => $this->input->post('user_id'),
+                'remark' => $this->input->post('remark'),
+            );
+            $this->db->insert('user_credit', $credit_data);
+            redirect('UserManager/adminCreditDebit#' . $this->input->post('user_id'));
+        }
+        $this->load->view('userManager/adminCreditDebit');
     }
 
 }
