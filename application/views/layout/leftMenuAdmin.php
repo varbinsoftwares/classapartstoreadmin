@@ -1,6 +1,7 @@
 <!-- begin #sidebar -->
 <?php
 $session_data = $this->session->userdata('logged_in');
+
 function checkPermission($session_data) {
     if ($session_data['user_type'] == 'Admin') {
         return "system";
@@ -19,14 +20,14 @@ function checkPermission($session_data) {
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <?php if ($session_data['image']) { ?>
+<?php if ($session_data['image']) { ?>
                     <img src="<?php echo base_url(); ?>assets_main/userimages/<?php echo $session_data['image']; ?>" class="img-circle" alt="User Image" style="    height: 45px;">
 
                     <?php
                 } else {
                     ?>
                     <img src="<?php echo base_url(); ?>assets_main/image/logo.png" class="img-circle" alt="User Image">
-                <?php } ?> 
+<?php } ?> 
 
             </div>
             <div class="pull-left info">
@@ -58,7 +59,7 @@ function checkPermission($session_data) {
                         </a>
                     </li>   
 
-                    <?php if (checkPermission($session_data) == 'system') { ?>
+<?php if (checkPermission($session_data) == 'system') { ?>
                         <li>
                             <a href="<?php echo site_url('Order/orderslistvendor'); ?>">
                                 <i class="active fa fa-plus "></i> <span>Vendor Orders Report</span>
@@ -73,7 +74,7 @@ function checkPermission($session_data) {
                         <?php
                     }
                     ?>
-                    <?php if (checkPermission($session_data) == 'vendor') { ?>
+<?php if (checkPermission($session_data) == 'vendor') { ?>
                         <li>      
                             <a href="<?php echo site_url('Order/orderAnalysisVendor') ?>">
                                 <i class="active fa fa-plus "></i> <span>Order Analytics</span>
@@ -113,7 +114,7 @@ function checkPermission($session_data) {
                     </li>    
 
 
-                    <?php if (checkPermission($session_data) == 'system') { ?>
+<?php if (checkPermission($session_data) == 'system') { ?>
                         <!--Admin Access-->
                         <li>
                             <a href="<?php echo base_url(); ?>index.php/ProductManager/categories">
@@ -135,7 +136,7 @@ function checkPermission($session_data) {
 
 
 
-            <?php if (checkPermission($session_data) == 'system') { ?>
+<?php if (checkPermission($session_data) == 'system') { ?>
 
 
                 <li class="treeview">
@@ -162,11 +163,34 @@ function checkPermission($session_data) {
                     </ul>
                 </li>
 
-                <li>
-                    <a href="<?php echo base_url(); ?>index.php/UserManager/usersCreditDebit">
-                        <i class="active fa fa-money "></i> <span>Allot Credits</span>
+
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-money"></i>
+                        <span>Credit Management</span>
+                         <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
                     </a>
-                </li>  
+                    <ul class="treeview-menu">
+                        <!--credit Access-->
+                        <li>
+                            <a href="<?php echo base_url(); ?>index.php/UserManager/usersCreditDebit">
+                                <i class="active fa fa-plus "></i> <span>Allot Credits</span>
+                            </a>
+                        </li>    
+                        <li>
+                            <a href="<?php echo base_url(); ?>index.php/UserManager/adminDebit">
+                                <i class="active fa fa-plus "></i> <span>Debit</span>
+                            </a>
+                        </li>    
+                        <!--end of admin access-->
+                    </ul>
+                </li>
+
+
+
 
                 <li class="treeview">
                     <a href="#">

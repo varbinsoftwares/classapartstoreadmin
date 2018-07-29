@@ -342,7 +342,7 @@ class UserManager extends CI_Controller {
         $this->load->view('userManager/usersCreditDebit');
     }
 
-    public function adminCreditDebit() {
+    public function adminDebit() {
         $op_date = date('Y-m-d');
         $op_time = date('H:i:s');
         if (isset($_POST['allot_credit'])) {
@@ -353,10 +353,10 @@ class UserManager extends CI_Controller {
                 'user_id' => $this->input->post('user_id'),
                 'remark' => $this->input->post('remark'),
             );
-            $this->db->insert('user_credit', $credit_data);
-            redirect('UserManager/adminCreditDebit#' . $this->input->post('user_id'));
+            $this->db->insert('user_debit', $credit_data);
+            redirect('UserManager/adminDebit#' . $this->input->post('user_id'));
         }
-        $this->load->view('userManager/adminCreditDebit');
+        $this->load->view('userManager/adminDebit');
     }
 
 }
