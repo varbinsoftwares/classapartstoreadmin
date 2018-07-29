@@ -337,6 +337,9 @@ class ProductManager extends CI_Controller {
             $picture = $data['product_obj']->file_name;
             $picture1 = $data['product_obj']->file_name1;
             $picture2 = $data['product_obj']->file_name2;
+            
+            $video_link = $data['product_obj']->video_link;
+            
             $config['upload_path'] = 'assets_main/productimages';
             $config['allowed_types'] = '*';
 //            $config['overwrite'] = TRUE;
@@ -441,6 +444,9 @@ class ProductManager extends CI_Controller {
             $this->db->set('credit_limit', $this->input->post('credit_limit'));
             $this->db->set('stock_status', $this->input->post('stock_status'));
             $this->db->set('keywords', $this->input->post('keywords'));
+            $this->db->set('video_link', $this->input->post('video_link'));
+            
+            
 
             $this->db->set('home_slider', $this->input->post('home_slider'));
             $this->db->set('home_bottom', $this->input->post('home_bottom'));

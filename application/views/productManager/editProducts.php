@@ -187,6 +187,10 @@ $session_data = $this->session->userdata('logged_in');
                                     <label for="exampleInputPassword1">Description</label>
                                     <textarea class="form-control"  name="description" style="height:250px" ><?php echo $product_obj->description; ?></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Video Link</label>
+                                    <input type="text" class="form-control price_tag_text" id='regular_price' name="video_link" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="" value="<?php echo $product_obj->video_link; ?>">
+                                </div>
                             </div>
 
                             <!-- /.tab-pane -->
